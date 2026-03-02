@@ -1,0 +1,45 @@
+.dashboard-header { margin-bottom: 35px; }
+.dashboard-header h1 { font-size: 2rem; color: #0f172a; font-weight: 800; }
+.dashboard-header p { color: #64748b; margin-top: 5px; }
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+}
+
+.stat-card {
+  background: white;
+  padding: 30px;
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+  transition: all 0.3s;
+  border: 1px solid #f1f5f9;
+}
+
+.stat-card:hover { transform: translateY(-8px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+
+.icon-box {
+  width: 60px;
+  height: 60px;
+  background: #f8fafc;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+}
+
+.stat-info h4 { font-size: 0.8rem; text-transform: uppercase; color: #64748b; letter-spacing: 1px; margin: 0; }
+.stat-info p { font-size: 2.2rem; font-weight: 800; color: #0f172a; margin: 5px 0 0; }
+
+.blue { border-bottom: 5px solid #38bdf8; }
+.green { border-bottom: 5px solid #10b981; }
+.yellow { border-bottom: 5px solid #f59e0b; }
+
+.activity-section { margin-top: 45px; background: white; padding: 30px; border-radius: 24px; border: 1px solid #f1f5f9; }
+.section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.badge { padding: 4px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; background: #fee2e2; color: #b91c1c; }

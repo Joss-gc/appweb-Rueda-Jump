@@ -1,0 +1,109 @@
+<app-navbar></app-navbar>
+<div class="contacto-wrapper">
+  <div class="header-section">
+    <h2 class="section-title">Ponte en Contacto</h2>
+    <p class="section-subtitle">Estamos listos para llevar la diversión a tu evento</p>
+  </div>
+
+  <div class="contacto-grid">
+    <div class="card-container">
+      <h3>Envíanos un mensaje</h3>
+      <form #contactoForm="ngForm" (submit)="enviarMensaje($event)" class="form-layout">
+        
+        <div class="field-group">
+          <label>Nombre Completo</label>
+          <input type="text" [(ngModel)]="nombre" name="nombre" #nameRef="ngModel" 
+                 required pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ]+\s+[a-zA-ZáéíóúÁÉÍÓÚñÑ]+.*$"
+                 placeholder="Nombre y Apellido">
+          @if (nameRef.invalid && (nameRef.dirty || nameRef.touched)) {
+            <small class="error-text">Ingresa al menos un nombre y un apellido.</small>
+          }
+        </div>
+        
+        <div class="field-group">
+          <label>Teléfono</label>
+          <input type="text" [(ngModel)]="telefono" name="telefono" #telRef="ngModel"
+                 required minlength="10" (keypress)="soloNumeros($event)" 
+                 maxlength="10" placeholder="7711234567">
+          @if (telRef.invalid && (telRef.dirty || telRef.touched)) {
+            <small class="error-text">Ingresa un número válido a 10 dígitos.</small>
+          }
+        </div>
+
+        <div class="field-group">
+          <label>Mensaje</label>
+          <textarea [(ngModel)]="mensaje" name="mensaje" #msgRef="ngModel"
+                    required maxlength="250" rows="4" 
+                    placeholder="¿En qué podemos ayudarte?"></textarea>
+          <div class="footer-msg">
+            @if (msgRef.invalid && (msgRef.dirty || msgRef.touched)) {
+              <small class="error-text"> Cuéntanos un poco más sobre tu evento.</small>
+            }
+            <span class="char-counter" [class.limit]="mensaje.length >= 250">
+              {{ mensaje.length }} / 250
+            </span>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-main" [disabled]="contactoForm.invalid">
+          ENVIAR MENSAJE
+        </button>
+      </form>
+    </div>
+
+    <div class="card-container">
+      <h3>Nuestros Datos</h3>
+      
+      <div class="contact-item">
+        <span class="icon-circle"></span>
+        <div>
+          <strong>Ubicación:</strong>
+          <p>Colonia Centro, Pachuca, Hidalgo</p>
+        </div>
+      </div>
+
+      <div class="contact-item">
+        <span class="icon-circle"></span>
+        <div>
+          <strong>Teléfono:</strong>
+          <p>55-1234-5678</p>
+        </div>
+      </div>
+
+      <div class="contact-item">
+        <span class="icon-circle">📧</span>
+        <div>
+          <strong>Email:</strong>
+          <p>contacto@ruedajump.com</p>
+        </div>
+      </div>
+
+      <div class="map-box">
+        <p>Mapa de Ubicación (Pachuca Centro)</p>
+      </div>
+    </div>
+  </div>
+
+  @if (mostrarAdvertencia) {
+    <div class="overlay" (click)="cerrarModales()">
+      <div class="modal-box warning-theme" (click)="$event.stopPropagation()">
+        <div class="status-icon">!</div>
+        <h2>¡Atención!</h2>
+        <p>Faltan datos importantes. Por favor, rellena todos los campos correctamente para que Joel pueda contactarte.</p>
+        <button class="btn-modal" (click)="cerrarModales()">REVISAR</button>
+      </div>
+    </div>
+  }
+
+  @if (mostrarMensajeExito) {
+    <div class="overlay" (click)="cerrarModales()">
+      <div class="modal-box success-theme" (click)="$event.stopPropagation()">
+        <div class="status-icon">✓</div>
+        <h2>¡Mensaje Enviado!</h2>
+        <p>Gracias <strong>{{ nombre }}</strong>, tu mensaje ha sido recibido. Nos comunicaremos contigo a la brevedad.</p>
+        <button class="btn-modal" (click)="cerrarModales()">ENTENDIDO</button>
+      </div>
+    </div>
+  }
+</div>
+<app-footer></app-footer>

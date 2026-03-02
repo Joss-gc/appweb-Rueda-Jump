@@ -1,0 +1,91 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10%; 
+  height: 95px; 
+  background-color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  border-bottom: 2px solid #3498db; 
+}
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.navbar-logo img {
+  height: 65px; 
+  width: auto;
+  transition: transform 0.3s;
+}
+
+.navbar-logo img:hover {
+  transform: scale(1.05);
+}
+
+.navbar-logo span {
+  font-family: 'Arial Black', sans-serif;
+  font-size: 1.5rem; 
+  color: #2c3e50;
+  letter-spacing: 1px;
+}
+
+.navbar-links {
+  display: flex;
+  list-style: none;
+  gap: 2.5rem; 
+  margin: 0;
+  padding: 0;
+}
+
+.navbar-links a {
+  text-decoration: none;
+  color: #555;
+  font-weight: 700; 
+  font-size: 1rem;
+  position: relative;
+  transition: color 0.3s;
+}
+
+.navbar-links a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -5px;
+  left: 0;
+  background-color: #3498db;
+  transition: width 0.3s;
+}
+
+.navbar-links a:hover::after, 
+.navbar-links a.active::after {
+  width: 100%;
+}
+
+.navbar-links a:hover, .active {
+  color: #3498db;
+}
+
+.btn-admin {
+  background-color: transparent;
+  border: 2px solid #3498db; 
+  color: #3498db;
+  padding: 10px 22px;
+  border-radius: 8px;
+  font-weight: 800;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-admin:hover {
+  background-color: #3498db;
+  color: white;
+  box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+}

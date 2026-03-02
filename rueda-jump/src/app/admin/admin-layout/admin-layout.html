@@ -1,0 +1,28 @@
+<div class="admin-container">
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <img src="assets/logo.png" alt="Logo" class="admin-logo">
+      <span class="brand-sub">PANEL DE CONTROL</span>
+    </div>
+
+    <div class="admin-profile">
+      <div class="avatar">👤</div>
+      <div class="profile-details">
+        <p class="full-name">{{ adminName }}</p>
+        <p class="username">@{{ adminUser }}</p>
+      </div>
+    </div>
+    
+    <nav class="sidebar-nav">
+      <a routerLink="/admin/dashboard" routerLinkActive="active">📊 Resumen</a>
+      <a routerLink="/admin/calendario" routerLinkActive="active">📅 Calendario</a>
+      <a routerLink="/admin/inventario" routerLinkActive="active">📦 Gestión de Equipos</a>
+      <div class="sidebar-spacer"></div>
+      <a (click)="logout()" class="logout-button">🚪 Cerrar Sesión</a>
+    </nav>
+  </aside>
+
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+</div>

@@ -1,0 +1,32 @@
+.footer {
+  background-color: #222;
+  color: white;
+  padding: 3rem 5% 1rem;
+  margin-top: 50px;
+}
+
+.footer-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.footer-section h4 {
+  color: #00b4d8;
+  margin-bottom: 1rem;
+}
+
+.footer-section p {
+  font-size: 0.9rem;
+  color: #ccc;
+  line-height: 1.6;
+}
+
+.footer-bottom {
+  text-align: center;
+  border-top: 1px solid #444;
+  padding-top: 1.5rem;
+  font-size: 0.8rem;
+  color: #888;
+}

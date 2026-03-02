@@ -1,0 +1,78 @@
+<app-navbar></app-navbar>
+<div class="catalogo-wrapper">
+  <div class="header-section">
+    <h2 class="section-title">Catálogo de Equipos</h2>
+    <p class="section-subtitle">Diversión garantizada en Pachuca, Hidalgo</p>
+  </div>
+
+  <div class="products-grid">
+    <div class="product-card" (click)="abrirModal('Toro Mecánico Deluxe', '$2,500.00 / 5 horas', '5x5 metros')">
+      <div class="badge-tag">TOP</div>
+      <div class="img-container">
+        <img src="https://placehold.co/400x300/3498db/white?text=Toro+Mecánico" alt="Toro Mecánico">
+      </div>
+      <div class="info-container">
+        <h3>Toro Mecánico Deluxe</h3>
+        <p class="price-tag">$2,500.00</p>
+        <button class="btn-view">Ver detalles</button>
+      </div>
+    </div>
+
+    <div class="product-card" (click)="abrirModal('Deslizador Acuático', '$1,800.00 / 5 horas', '10x3 metros')">
+      <div class="img-container">
+        <img src="https://placehold.co/400x300/27ae60/white?text=Inflable+Acuático" alt="Inflable Acuático">
+      </div>
+      <div class="info-container">
+        <h3>Deslizador Acuático</h3>
+        <p class="price-tag">$1,800.00</p>
+        <button class="btn-view">Ver detalles</button>
+      </div>
+    </div>
+  </div>
+
+  @if (mostrarModal) {
+    <div class="overlay" (click)="cerrarModal()">
+      <div class="modal-box" (click)="$event.stopPropagation()">
+        <span class="btn-close" (click)="cerrarModal()">&times;</span>
+        
+        <div class="modal-layout">
+          <div class="modal-gallery">
+            <div class="main-img-holder">
+              <img src="https://placehold.co/500x500/f8f9fa/34495e?text=Vista+Detallada" alt="Detalle del equipo">
+            </div>
+          </div>
+          
+          <div class="modal-content-info">
+            <h2>{{productoSeleccionado.nombre}}</h2>
+            <p class="modal-price">{{productoSeleccionado.precio}}</p>
+            
+            <div class="specs-box">
+              <p> <strong>Medidas:</strong> {{productoSeleccionado.medidas}}</p>
+              <p> <strong>Requerimientos:</strong> 110v</p>
+              <p> <strong>Estado:</strong> Sanitizado</p>
+            </div>
+
+            <div class="booking-section">
+              <label>Selecciona fecha de evento:</label>
+              <input type="date" class="date-picker" [(ngModel)]="fechaSeleccionada" [min]="fechaMinima">
+              <button class="btn-submit" (click)="confirmarReserva()">SOLICITAR RESERVA</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (mostrarMensajeExito) {
+    <div class="overlay" (click)="cerrarTodo()">
+      <div class="modal-box success-modal" (click)="$event.stopPropagation()">
+        <div class="success-icon">✓</div>
+        <h2>¡Solicitud Enviada!</h2>
+        <p>Tu reserva para el día <strong>{{ fechaSeleccionada | date:'longDate':'':'es' }}</strong> ha sido recibida correctamente.</p>
+        <p class="sub-text">Joel revisará la disponibilidad y se pondrá en contacto contigo a la brevedad.</p>
+        <button class="btn-submit btn-confirm" (click)="cerrarTodo()">ENTENDIDO</button>
+      </div>
+    </div>
+  }
+</div>
+<app-footer></app-footer>

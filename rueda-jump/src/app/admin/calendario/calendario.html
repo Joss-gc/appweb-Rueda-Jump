@@ -1,0 +1,33 @@
+<div class="calendar-wrapper">
+  <header class="calendar-header">
+    <div class="month-controls">
+      <button class="btn-nav" (click)="cambiarMes(-1)">‹</button>
+      <h1>{{ mesNombre }} <span>{{ anioActual }}</span></h1>
+      <button class="btn-nav" (click)="cambiarMes(1)">›</button>
+    </div>
+    <div class="calendar-status">
+      <span class="status-pill busy">Ocupado</span>
+      <span class="status-pill pending">Pendiente</span>
+    </div>
+  </header>
+
+  <div class="calendar-grid-card">
+    <div class="weekdays-row">
+      <span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span>
+    </div>
+    <div class="days-grid">
+      @for (dia of diasDelMes; track $index) {
+        <div class="day-cell" [class.empty]="!dia">
+          @if (dia) {
+            <span class="day-num">{{ dia }}</span>
+            @if (obtenerRenta(dia); as renta) {
+              <div class="event-tag" [class]="renta.estado">
+                {{ renta.equipo }}
+              </div>
+            }
+          }
+        </div>
+      }
+    </div>
+  </div>
+</div>
