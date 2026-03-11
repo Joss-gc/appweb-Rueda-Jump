@@ -72,3 +72,28 @@
 
 .event-tag.busy { background: #fee2e2; color: #b91c1c; }
 .event-tag.pending { background: #fef3c7; color: #92400e; }
+
+/* =========================================
+   RESPONSIVO CELULARES
+   ========================================= */
+@media (max-width: 768px) {
+  .calendar-header {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+  
+  .calendar-grid-card {
+    padding: 15px;
+    overflow-x: auto; /* Permite deslizar a los lados si no cabe */
+  }
+  
+  .weekdays-row, .days-grid {
+    min-width: 600px; /* Evita que los días se hagan infinitamente flacos */
+  }
+  
+  .day-cell {
+    min-height: 100px; /* Celdas un poco más cortas */
+    padding: 8px;
+  }
+}

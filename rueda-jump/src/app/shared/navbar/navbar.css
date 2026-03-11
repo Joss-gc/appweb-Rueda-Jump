@@ -12,11 +12,7 @@
   border-bottom: 2px solid #3498db; 
 }
 
-.navbar-logo {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
+.navbar-logo { display: flex; align-items: center; gap: 15px; }
 
 .navbar-logo img {
   height: 65px; 
@@ -24,9 +20,7 @@
   transition: transform 0.3s;
 }
 
-.navbar-logo img:hover {
-  transform: scale(1.05);
-}
+.navbar-logo img:hover { transform: scale(1.05); }
 
 .navbar-logo span {
   font-family: 'Arial Black', sans-serif;
@@ -36,56 +30,50 @@
 }
 
 .navbar-links {
-  display: flex;
-  list-style: none;
-  gap: 2.5rem; 
-  margin: 0;
-  padding: 0;
+  display: flex; list-style: none; gap: 2.5rem; margin: 0; padding: 0;
 }
 
 .navbar-links a {
-  text-decoration: none;
-  color: #555;
-  font-weight: 700; 
-  font-size: 1rem;
-  position: relative;
-  transition: color 0.3s;
+  text-decoration: none; color: #555; font-weight: 700; font-size: 1rem;
+  position: relative; transition: color 0.3s;
 }
 
 .navbar-links a::after {
-  content: '';
-  position: absolute;
-  width: 0;
-  height: 2px;
-  bottom: -5px;
-  left: 0;
-  background-color: #3498db;
-  transition: width 0.3s;
+  content: ''; position: absolute; width: 0; height: 2px;
+  bottom: -5px; left: 0; background-color: #3498db; transition: width 0.3s;
 }
 
-.navbar-links a:hover::after, 
-.navbar-links a.active::after {
-  width: 100%;
-}
-
-.navbar-links a:hover, .active {
-  color: #3498db;
-}
+.navbar-links a:hover::after, .navbar-links a.active::after { width: 100%; }
+.navbar-links a:hover, .active { color: #3498db; }
 
 .btn-admin {
-  background-color: transparent;
-  border: 2px solid #3498db; 
-  color: #3498db;
-  padding: 10px 22px;
-  border-radius: 8px;
-  font-weight: 800;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
+  background-color: transparent; border: 2px solid #3498db; color: #3498db;
+  padding: 10px 22px; border-radius: 8px; font-weight: 800; font-size: 0.9rem;
+  cursor: pointer; transition: all 0.3s ease;
 }
 
 .btn-admin:hover {
-  background-color: #3498db;
-  color: white;
-  box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+  background-color: #3498db; color: white; box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+}
+
+/* =========================================
+   NUEVO: DISEÑO RESPONSIVO (CELULARES)
+   ========================================= */
+@media (max-width: 850px) {
+  .navbar {
+    flex-direction: column;
+    height: auto;
+    padding: 15px 5%;
+    gap: 15px;
+  }
+  
+  .navbar-links {
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .navbar-admin { width: 100%; }
+  
+  .btn-admin { width: 100%; }
 }

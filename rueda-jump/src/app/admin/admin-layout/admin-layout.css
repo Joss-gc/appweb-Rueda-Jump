@@ -63,3 +63,28 @@
 .logout-button { color: #f87171 !important; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 25px !important; cursor: pointer; }
 
 .main-content { flex-grow: 1; padding: 40px; overflow-y: auto; }
+
+/* =========================================
+   RESPONSIVO CELULARES
+   ========================================= */
+@media (max-width: 768px) {
+  .admin-container {
+    flex-direction: column; /* Apila el sidebar arriba y el contenido abajo */
+  }
+  
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: static;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+  
+  .sidebar-spacer { display: none; /* Quitamos el espacio vacío en móvil */ }
+  
+  .logout-button { border-top: none; padding-top: 10px !important; }
+  
+  .main-content {
+    padding: 20px;
+  }
+}

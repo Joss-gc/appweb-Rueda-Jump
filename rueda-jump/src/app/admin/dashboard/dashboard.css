@@ -43,3 +43,18 @@
 .activity-section { margin-top: 45px; background: white; padding: 30px; border-radius: 24px; border: 1px solid #f1f5f9; }
 .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
 .badge { padding: 4px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; background: #fee2e2; color: #b91c1c; }
+
+/* =========================================
+   RESPONSIVO CELULARES
+   ========================================= */
+@media (max-width: 768px) {
+  .dashboard-header h1 { font-size: 1.6rem; }
+  
+  .activity-section { padding: 20px; }
+  
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+}

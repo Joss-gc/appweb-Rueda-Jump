@@ -77,15 +77,14 @@
 
 .btn-back { display: inline-block; margin-top: 25px; color: #bdc3c7; text-decoration: none; font-size: 0.9rem; font-weight: 600; }
 .btn-back:hover { color: #3498db; }
-/* Copia y pega aquí todo el contenido de tu login.css actual */
 
-/* Añade estas líneas específicas para el registro al final: */
+/* Líneas específicas para el registro */
 .registro-card {
-  max-width: 500px; /* Un poco más ancho porque hay más campos */
+  max-width: 500px;
 }
 
 .secret-code {
-  border: 2px solid #f39c12; /* Borde naranja para advertir que es importante */
+  border: 2px solid #f39c12;
   background: #fffcf5;
 }
 
@@ -95,7 +94,7 @@
 }
 
 .btn-register {
-  background: #27ae60; /* Verde para indicar "creación exitosa" */
+  background: #27ae60;
   margin-top: 10px;
 }
 
@@ -120,4 +119,15 @@
 .btn-link-special:hover {
   color: #e67e22;
   transform: scale(1.05);
+}
+
+/* =========================================
+   RESPONSIVO CELULARES
+   ========================================= */
+@media (max-width: 768px) {
+  .login-card, .registro-card {
+    padding: 30px 20px; /* Reducimos padding interno */
+  }
+  .login-header h2 { font-size: 1.5rem; }
+  .login-logo { height: 60px; }
 }
