@@ -3,8 +3,8 @@
    ========================================= */
 .hero-section {
   position: relative;
-  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
-  color: white;
+  background: linear-gradient(135deg, #2faafc 0%, #2eabff 100%);
+  color: rgb(255, 225, 0);
   padding: 80px 20px;
   padding-bottom: 120px;
   text-align: center;
@@ -28,8 +28,8 @@
 }
 
 .btn-primary {
-  background-color: #f1c40f; 
-  color: #2c3e50;
+  background-color: #dc4f4f; 
+  color: #ffffff;
   padding: 15px 40px;
   border: none;
   border-radius: 50px;
