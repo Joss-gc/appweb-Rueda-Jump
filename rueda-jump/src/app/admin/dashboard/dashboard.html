@@ -5,7 +5,9 @@
   </header>
 
   <div class="stats-grid">
-    <div class="stat-card blue">
+
+    <!-- INGRESOS -->
+    <div class="stat-card blue" (click)="irA('ingresos')" style="cursor: pointer;">
       <div class="icon-box">💰</div>
       <div class="stat-info">
         <h4>Ingresos Mes</h4>
@@ -13,7 +15,8 @@
       </div>
     </div>
 
-    <div class="stat-card green">
+    <!-- RENTAS -->
+    <div class="stat-card green" (click)="irA('rentas')" style="cursor: pointer;">
       <div class="icon-box">📈</div>
       <div class="stat-info">
         <h4>Rentas Totales</h4>
@@ -21,20 +24,23 @@
       </div>
     </div>
 
-    <div class="stat-card yellow">
+    <!-- EQUIPOS -->
+    <div class="stat-card yellow" (click)="irA('equipos')" style="cursor: pointer;">
       <div class="icon-box">🎈</div>
       <div class="stat-info">
         <h4>Equipos Activos</h4>
         <p>8</p>
       </div>
     </div>
+
   </div>
 
   <section class="activity-section">
     <div class="section-header">
       <h3>📅 Próximas Rentas</h3>
-      <button class="btn-text">Ver todo el calendario →</button>
+      <button class="btn-text" (click)="irA('rentas')">Ver todo el calendario →</button>
     </div>
+
     <div class="table-container">
       <table class="activity-table">
         <thead>
