@@ -1,4 +1,3 @@
-<app-navbar></app-navbar>
 <div class="contacto-wrapper">
   <div class="header-section">
     <h2 class="section-title">Ponte en Contacto</h2>
@@ -39,9 +38,9 @@
             @if (msgRef.invalid && (msgRef.dirty || msgRef.touched)) {
               <small class="error-text"> Cuéntanos un poco más sobre tu evento.</small>
             }
-            <span class="char-counter" [class.limit]="mensaje.length >= 250">
-              {{ mensaje.length }} / 250
-            </span>
+          <span class="char-counter" [class.limit]="(mensaje?.length || 0) >= 250">
+  {{ mensaje?.length || 0 }} / 250
+</span>
           </div>
         </div>
 
@@ -106,4 +105,3 @@
     </div>
   }
 </div>
-<app-footer></app-footer>

@@ -27,6 +27,11 @@ export class Dashboard implements OnInit {
     }
   }
 
+  // 🔥 NUEVA FUNCIÓN PARA NAVEGACIÓN
+  irA(ruta: string) {
+    this.router.navigate(['/admin', ruta]);
+  }
+
   logout() {
     if (isPlatformBrowser(this.platformId)) {
       localStorage.removeItem('admin_logged_in');
