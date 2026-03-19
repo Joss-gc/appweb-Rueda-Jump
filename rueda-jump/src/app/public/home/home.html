@@ -1,31 +1,35 @@
-<app-navbar></app-navbar>
-
 <main>
-  <section class="hero-section">
-    <div class="hero-content">
-      <h1>¡LA MEJOR DIVERSIÓN PARA TU EVENTO!</h1>
-      <p>Renta de Toros Mecánicos e Inflables Acuáticos en Pachuca</p>
-      <button routerLink="/catalogo" class="btn-primary">VER CATÁLOGO</button>
+  <section class="bg-primary text-white text-center py-5">
+    <div class="container py-5">
+      <h1 class="display-4 fw-bolder mb-3">¡LA MEJOR DIVERSIÓN PARA TU EVENTO!</h1>
+      <p class="lead mb-4">Renta de Toros Mecánicos e Inflables en Pachuca</p>
+      <button routerLink="/catalogo" class="btn btn-warning btn-lg fw-bold shadow">VER CATÁLOGO</button>
     </div>
   </section>
 
-  <section class="features">
-    <div class="feature-item">
-      <div class="icon"></div>
-      <h3>Seguridad Garantizada</h3>
-      <p>Equipos en excelente estado y con operadores capacitados.</p>
-    </div>
-    <div class="feature-item">
-      <div class="icon"></div>
-      <h3>Limpieza Total</h3>
-      <p>Sanitizamos cada inflable antes y después de cada evento.</p>
-    </div>
-    <div class="feature-item">
-      <div class="icon"></div>
-      <h3>Puntualidad</h3>
-      <p>Llegamos a tiempo para que la diversión no se detenga.</p>
+  <section class="container py-5">
+    <div class="row g-4 text-center">
+      <div class="col-md-4">
+        <div class="card h-100 shadow-sm border-0 py-4">
+          <div class="display-4 mb-2">🛡️</div>
+          <h3 class="fw-bold text-primary">Seguridad</h3>
+          <p class="text-muted px-3">Equipos revisados y operadores capacitados.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card h-100 shadow-sm border-0 py-4">
+          <div class="display-4 mb-2">✨</div>
+          <h3 class="fw-bold text-primary">Limpieza</h3>
+          <p class="text-muted px-3">Sanitizamos cada equipo antes de entregarlo.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card h-100 shadow-sm border-0 py-4">
+          <div class="display-4 mb-2">⏱️</div>
+          <h3 class="fw-bold text-primary">Puntualidad</h3>
+          <p class="text-muted px-3">Llegamos a tiempo para que la diversión no pare.</p>
+        </div>
+      </div>
     </div>
   </section>
 </main>
-
-<app-footer></app-footer>

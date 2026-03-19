@@ -1,78 +1,41 @@
-<app-navbar></app-navbar>
-<div class="catalogo-wrapper">
-  <div class="header-section">
-    <h2 class="section-title">Catálogo de Equipos</h2>
-    <p class="section-subtitle">Diversión garantizada en Pachuca, Hidalgo</p>
+<div class="container py-5">
+  <div class="text-center mb-5">
+    <h2 class="display-5 fw-bold text-dark">Catálogo de Equipos</h2>
+    <p class="text-muted">Diversión garantizada en Pachuca, Hidalgo</p>
   </div>
 
-  <div class="products-grid">
-    <div class="product-card" (click)="abrirModal('Toro Mecánico Deluxe', '$3,500.00 / 5 horas', '5x5 metros')">
-      <div class="badge-tag">TOP</div>
-      <div class="img-container">
-        <img src="assets/toro.jpg" alt="Toro Mecánico">
-      </div>
-      <div class="info-container">
-        <h3>Toro Mecánico Deluxe</h3>
-        <p class="price-tag">$3,500.00</p>
-        <button class="btn-view">Ver detalles</button>
-      </div>
-    </div>
-
-    <div class="product-card" (click)="abrirModal('Deslizador Acuático', '$6,500.00 / El tiempo que dure tu evento', '10x3 metros')">
-      <div class="img-container">
-        <img src="assets/skualo.jpg" alt="Inflable Acuático">
-      </div>
-      <div class="info-container">
-        <h3>Deslizador Acuático</h3>
-        <p class="price-tag">$6,500</p>
-        <button class="btn-view">Ver detalles</button>
-      </div>
-    </div>
-  </div>
-
-  @if (mostrarModal) {
-    <div class="overlay" (click)="cerrarModal()">
-      <div class="modal-box" (click)="$event.stopPropagation()">
-        <span class="btn-close" (click)="cerrarModal()">&times;</span>
-        
-        <div class="modal-layout">
-          <div class="modal-gallery">
-            <div class="main-img-holder">
-              <img src="assets/detalleskualo.jpg" alt="Detalle del equipo">
-            </div>
-          </div>
-          
-          <div class="modal-content-info">
-            <h2>{{productoSeleccionado.nombre}}</h2>
-            <p class="modal-price">{{productoSeleccionado.precio}}</p>
-            
-            <div class="specs-box">
-              <p> <strong>Medidas:</strong> {{productoSeleccionado.medidas}}</p>
-              <p> <strong>Requerimientos:</strong> 110v</p>
-              <p> <strong>Estado:</strong> Sanitizado</p>
-            </div>
-
-            <div class="booking-section">
-              <label>Selecciona fecha de evento:</label>
-              <input type="date" class="date-picker" [(ngModel)]="fechaSeleccionada" [min]="fechaMinima">
-              <button class="btn-submit" (click)="confirmarReserva()">SOLICITAR RESERVA</button>
-            </div>
-          </div>
+  <div class="row g-4">
+    <div class="col-md-4" *ngFor="let prod of productos">
+      <div class="card h-100 shadow-sm">
+        <div class="bg-light text-center py-5">
+          <span class="fs-1">📸</span>
+        </div>
+        <div class="card-body text-center">
+          <span class="badge bg-warning text-dark mb-2">{{ prod.categoria }}</span>
+          <h4 class="card-title fw-bold">{{ prod.nombre }}</h4>
+          <p class="text-success fs-4 fw-bold">${{ prod.precio }}</p>
+          <button class="btn btn-primary w-100" (click)="abrirModal(prod.nombre, prod.precio, prod.medidas)">Ver detalles</button>
         </div>
       </div>
     </div>
-  }
+  </div>
 
-  @if (mostrarMensajeExito) {
-    <div class="overlay" (click)="cerrarTodo()">
-      <div class="modal-box success-modal" (click)="$event.stopPropagation()">
-        <div class="success-icon">✓</div>
-        <h2>¡Solicitud Enviada!</h2>
-        <p>Tu reserva para el día <strong>{{ fechaSeleccionada | date:'longDate':'':'es' }}</strong> ha sido recibida correctamente.</p>
-        <p class="sub-text">Joel revisará la disponibilidad y se pondrá en contacto contigo a la brevedad.</p>
-        <button class="btn-submit btn-confirm" (click)="cerrarTodo()">ENTENDIDO</button>
+  <div class="modal d-block" tabindex="-1" *ngIf="mostrarModal" style="background: rgba(0,0,0,0.6);">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title">{{ productoSeleccionado?.nombre }}</h5>
+          <button type="button" class="btn-close btn-close-white" (click)="cerrarModal()"></button>
+        </div>
+        <div class="modal-body text-center">
+          <p class="display-6 text-success fw-bold">{{ productoSeleccionado?.precio }}</p>
+          <ul class="list-group list-group-flush text-start mb-4">
+            <li class="list-group-item"><strong>Medidas:</strong> {{ productoSeleccionado?.medidas }}</li>
+            <li class="list-group-item"><strong>Requerimientos:</strong> 110v</li>
+          </ul>
+          <button class="btn btn-success btn-lg w-100" (click)="confirmarReserva()">RESERVAR ESTE EQUIPO</button>
+        </div>
       </div>
     </div>
-  }
+  </div>
 </div>
-<app-footer></app-footer>
