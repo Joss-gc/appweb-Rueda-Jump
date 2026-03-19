@@ -1,41 +1,41 @@
-<div class="login-wrapper">
-  <div class="login-card">
-    <div class="login-header">
-      <img src="assets/logo.jpg" alt="Logo Rueda Jump" class="login-logo">
-      <h2>Acceso Administrativo</h2>
-      <p>Ingresa tus credenciales para gestionar el sistema</p>
+<div class="d-flex align-items-center justify-content-center min-vh-100 bg-primary">
+  
+  <div class="card shadow-lg border-0" style="max-width: 400px; width: 100%; border-radius: 20px;">
+    <div class="card-body p-5 text-center">
+      
+      <div class="mb-4">
+        <span class="display-1 text-primary">🔒</span>
+      </div>
+
+      <h3 class="fw-bold mb-4 text-dark">Acceso Administrativo</h3>
+
+      <div class="alert alert-danger py-2" *ngIf="mensajeError">
+        {{ mensajeError }}
+      </div>
+
+      <form (ngSubmit)="iniciarSesion()">
+        
+        <div class="input-group mb-3">
+          <span class="input-group-text bg-light border-end-0">👤</span>
+          <input type="text" class="form-control form-control-lg bg-light border-start-0" 
+                 placeholder="Usuario" name="usuario" [(ngModel)]="usuario" required>
+        </div>
+
+        <div class="input-group mb-4">
+          <span class="input-group-text bg-light border-end-0">🔑</span>
+          <input type="password" class="form-control form-control-lg bg-light border-start-0" 
+                 placeholder="Contraseña" name="contrasena" [(ngModel)]="contrasena" required>
+        </div>
+
+        <button type="submit" class="btn btn-warning btn-lg w-100 fw-bold rounded-pill mb-4 shadow-sm">
+          ENTRAR AL PANEL
+        </button>
+      </form>
+
+      <a routerLink="/catalogo" class="text-decoration-none text-muted fw-bold hover-primary">
+        ← Volver al Catálogo
+      </a>
+
     </div>
-
-    <form (submit)="login($event)" class="login-form">
-      <div class="input-group">
-        <label>Usuario</label>
-        <div class="input-with-icon">
-          <span>👤</span>
-          <input type="text" [(ngModel)]="usuario" name="usuario" placeholder="Nombre de usuario" required>
-        </div>
-      </div>
-
-      <div class="input-group">
-        <label>Contraseña</label>
-        <div class="input-with-icon">
-          <span></span>
-          <input type="password" [(ngModel)]="password" name="password" placeholder="••••••••" required>
-        </div>
-      </div>
-
-      @if (errorLogin) {
-        <div class="error-box">
-           Usuario o contraseña incorrectos.
-        </div>
-      }
-
-      <button type="submit" class="btn-login">ENTRAR AL PANEL</button>
-      
-      <div class="footer-links">
-        <a routerLink="/admin/registro" class="btn-link-special"> Crear cuenta Admin</a>
-        <a routerLink="/home" class="btn-back">← Volver al inicio</a>
-      </div>
-      
-    </form>
   </div>
 </div>

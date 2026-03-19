@@ -1,53 +1,32 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { Router, RouterModule} from '@angular/router';
+import { FormsModule } from '@angular/forms'; // <--- ESTO ES LO QUE FALTA
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule], // <--- ASEGÚRATE DE QUE FormsModule ESTÉ AQUÍ
   templateUrl: './login.html',
   styleUrl: './login.css'
 })
 export class Login {
-  usuario = '';
-  password = '';
-  errorLogin = false;
+  usuario: string = '';
+  contrasena: string = '';
+  mensajeError: string = '';
 
   constructor(private router: Router) {}
 
-  login(event: Event) {
-    event.preventDefault();
-    
-    const adminGuardado = localStorage.getItem('rueda_admin_data');
-    
-    if (adminGuardado) {
-      const admin = JSON.parse(adminGuardado);
-      if (this.usuario === admin.usuario && this.password === admin.password) {
-        localStorage.setItem('admin_logged_in', 'true');
-        this.errorLogin = false;
-        this.router.navigate(['/admin/dashboard']);
-        return;
-      }
+  iniciarSesion() {
+    if (!this.usuario || !this.contrasena) {
+      this.mensajeError = 'Por favor, ingresa tu usuario y contraseña.';
+      return;
     }
-    this.errorLogin = true;
-  }
-  loginAd(event: Event) {
-    event.preventDefault();
-    
-    const adminGuardado = localStorage.getItem('rueda_admin_data');
-    
-    if (adminGuardado) {
-      const admin = JSON.parse(adminGuardado);
-      if (this.usuario === admin.usuario && this.password === admin.password) {
-        localStorage.setItem('admin_logged_in', 'true');
-        this.errorLogin = false;
-        this.router.navigate(['/admin/dashboard']);
-        return;
-      }
+    if (this.usuario === 'admin' && this.contrasena === '1234') {
+      this.mensajeError = '';
+      this.router.navigate(['/admin/dashboard']);
+    } else {
+      this.mensajeError = 'Usuario o contraseña incorrectos.';
     }
-    
-    this.errorLogin = true;
   }
 }

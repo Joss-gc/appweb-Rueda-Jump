@@ -1,45 +1,258 @@
-<div class="inventory-container">
-  <div class="inventory-header">
-    <h2>Gestión de Inventario</h2>
-    <button class="btn-add">+ Agregar Equipo</button>
+<div class="d-flex min-vh-100 bg-light flex-column flex-lg-row position-relative">
+  
+  <button class="btn btn-dark d-lg-none position-absolute top-0 start-0 m-3 z-3 rounded-pill shadow" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu">
+    <i class="bi bi-list fs-4"></i>
+  </button>
+
+  <div class="offcanvas-lg offcanvas-start bg-dark text-white p-3 d-flex flex-column shadow-lg" tabindex="-1" id="sidebarMenu" style="width: 260px; min-width: 260px;">
+    
+    <div class="offcanvas-header d-lg-none border-bottom border-secondary mb-3">
+      <h5 class="offcanvas-title text-warning fw-bold m-0"><span class="fs-4">🎪</span> RUEDA JUMP</h5>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" data-bs-target="#sidebarMenu"></button>
+    </div>
+
+    <div class="text-center mb-4 mt-3 d-none d-lg-block">
+      <div class="bg-white rounded-circle d-inline-flex justify-content-center align-items-center mb-2 shadow" style="width: 60px; height: 60px;">
+        <span class="fs-2">🎪</span>
+      </div>
+      <h4 class="fw-bolder text-warning mt-2 tracking-wide">RUEDA JUMP</h4>
+      <span class="badge bg-secondary rounded-pill fw-normal">Panel Admin</span>
+    </div>
+    
+    <ul class="nav nav-pills flex-column mb-auto mt-2 gap-2">
+      <li class="nav-item">
+        <a routerLink="/admin/dashboard" routerLinkActive="active" class="nav-link text-white rounded-3 py-2 px-3 transition-all hover-bg-darker">
+          <i class="bi bi-speedometer2 me-2"></i> Dashboard
+        </a>
+      </li>
+      <li class="nav-item">
+        <a routerLink="/admin/calendario" routerLinkActive="active" class="nav-link text-white rounded-3 py-2 px-3 transition-all hover-bg-darker">
+          <i class="bi bi-calendar3-event me-2"></i> Calendario
+        </a>
+      </li>
+      <li class="nav-item">
+        <a routerLink="/admin/solicitudes" routerLinkActive="active" class="nav-link text-white rounded-3 py-2 px-3 transition-all hover-bg-darker">
+          <i class="bi bi-bell-fill me-2"></i> Solicitudes Web
+        </a>
+      </li>
+      <li class="nav-item">
+        <a routerLink="/admin/inventario" routerLinkActive="active" class="nav-link text-white fw-bold rounded-3 py-2 px-3 shadow-sm bg-primary bg-gradient">
+          <i class="bi bi-box-seam me-2"></i> Inventario
+        </a>
+      </li>
+      <li class="nav-item">
+        <a routerLink="/admin/clientes" routerLinkActive="active" class="nav-link text-white rounded-3 py-2 px-3 transition-all hover-bg-darker">
+          <i class="bi bi-people me-2"></i> Clientes
+        </a>
+      </li>
+    </ul>
+    <hr class="border-secondary opacity-25">
+    <a routerLink="/home" class="nav-link text-danger fw-bold text-center rounded-3 py-2 hover-bg-danger-light transition-all">
+      <i class="bi bi-door-open me-2"></i> Salir del Sistema
+    </a>
   </div>
 
-  <div class="table-responsive">
-    <table class="inventory-table">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Producto</th>
-          <th>Categoría</th>
-          <th>Precio</th>
-          <th>Estado</th>
-          <th>Acción</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>01</td>
-          <td><strong>Toro Mecánico Deluxe</strong></td>
-          <td class="text-muted">Mecánico</td>
-          <td>$2,500</td>
-          <td><span class="status-active">Activo</span></td>
-          <td class="actions">
-            <button class="btn-edit">✎</button>
-            <button class="btn-delete">🗑</button>
-          </td>
-        </tr>
-        <tr>
-          <td>03</td>
-          <td><strong>Deslizador Acuático</strong></td>
-          <td class="text-muted">Acuático</td>
-          <td>$1,800</td>
-          <td><span class="status-maint">Mantenimiento</span></td>
-          <td class="actions">
-            <button class="btn-edit">✎</button>
-            <button class="btn-delete">🗑</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+<div class="flex-grow-1 p-3 p-md-5 mt-5 mt-lg-0" style="overflow-y: auto; height: 100vh; padding-bottom: 5rem !important;">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 border-bottom pb-4">
+      <div class="pt-2 pt-md-0">
+        <h2 class="fw-bolder m-0 text-dark"><i class="bi bi-box-seam-fill me-2 text-primary"></i>Gestión de Inventario</h2>
+        <p class="text-muted m-0 mt-1">Administra los equipos y sus especificaciones técnicas.</p>
+      </div>
+      <button class="btn btn-primary fw-bold shadow-sm mt-3 mt-md-0 rounded-pill px-4 py-2" data-bs-toggle="modal" data-bs-target="#modalAgregar">
+        <i class="bi bi-plus-lg me-1"></i> NUEVO ARTÍCULO
+      </button>
+    </div>
+
+    <div *ngIf="listaEquipos.length === 0" class="text-center py-5 text-muted">
+        <i class="bi bi-inbox display-1"></i>
+        <h4 class="mt-3">Aún no hay equipos</h4>
+        <p>Agrega el primer artículo a tu inventario.</p>
+    </div>
+
+    <div class="row g-4" *ngIf="listaEquipos.length > 0">
+      <div class="col-12 col-sm-6 col-lg-4 col-xl-3" *ngFor="let e of listaEquipos">
+        <div class="card border-0 shadow-sm h-100 rounded-4 overflow-hidden hover-lift">
+          <div class="bg-light position-relative" style="height: 180px;">
+            <img [src]="e.imgUrl ? 'http://localhost:3000' + e.imgUrl : 'https://images.unsplash.com/photo-1549558549-415fe4c37b60?auto=format&fit=crop&w=400&q=80'" 
+                 class="w-100 h-100" style="object-fit: cover; opacity: 0.8;" alt="Foto equipo">
+            <span class="badge position-absolute top-0 end-0 m-2 px-3 py-2 rounded-pill shadow-sm"
+                  [ngClass]="e.stock > 0 ? 'bg-success' : 'bg-danger'">
+              {{e.stock > 0 ? 'Stock: ' + e.stock : 'Agotado'}}
+            </span>
+          </div>
+
+          <div class="card-body">
+            <h5 class="fw-bold mb-1 text-truncate">{{e.nombre}}</h5>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="text-success fw-bolder fs-5">${{e.precio}}</span>
+              <span class="badge bg-light text-dark border"><i class="bi bi-lightning-fill text-warning me-1"></i>{{e.voltaje || '110v'}}</span>
+            </div>
+            <p class="text-muted small mb-3 border-bottom pb-2"><i class="bi bi-rulers me-1"></i>{{e.medidas || 'N/A'}}</p>
+            
+            <div class="d-flex gap-2">
+              <button class="btn btn-light border flex-grow-1 text-primary fw-bold rounded-pill" 
+                      (click)="seleccionar(e)" data-bs-toggle="modal" data-bs-target="#modalEditar">
+                <i class="bi bi-pencil-square"></i> Editar
+              </button>
+              <button class="btn btn-light border text-danger rounded-pill px-3" 
+                      (click)="seleccionar(e)" data-bs-toggle="modal" data-bs-target="#modalEliminar">
+                <i class="bi bi-trash3"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
+
+<div class="modal fade" id="modalAgregar" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+      <div class="modal-header bg-dark text-white border-0 py-3">
+        <h5 class="modal-title fw-bold m-0"><i class="bi bi-plus-circle me-2"></i>Agregar Nuevo Equipo</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4 bg-light">
+        <div class="row g-4">
+          <div class="col-md-7">
+            <div class="mb-3">
+              <label class="fw-bold small text-secondary mb-1">Nombre del Inflable *</label>
+              <input type="text" class="form-control border-0 shadow-sm" [(ngModel)]="nuevoEquipo.nombre">
+            </div>
+            <div class="row g-3 mb-3">
+              <div class="col-6">
+                <label class="fw-bold small text-secondary mb-1">Precio ($) *</label>
+                <input type="number" class="form-control border-0 shadow-sm" [(ngModel)]="nuevoEquipo.precio">
+              </div>
+              <div class="col-6">
+                <label class="fw-bold small text-secondary mb-1">Voltaje</label>
+                <select class="form-select border-0 shadow-sm" [(ngModel)]="nuevoEquipo.voltaje">
+                  <option value="110v">110v</option>
+                  <option value="220v">220v</option>
+                </select>
+              </div>
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-6">
+                    <label class="fw-bold small text-secondary mb-1">Stock</label>
+                    <input type="number" class="form-control border-0 shadow-sm" [(ngModel)]="nuevoEquipo.stock">
+                </div>
+                <div class="col-6">
+                    <label class="fw-bold small text-secondary mb-1">Medidas</label>
+                    <input type="text" class="form-control border-0 shadow-sm" [(ngModel)]="nuevoEquipo.altura" placeholder="Ej. 5x5m">
+                </div>
+            </div>
+            <div class="mb-3">
+              <label class="fw-bold small text-secondary mb-1">Descripción Corta</label>
+              <textarea class="form-control border-0 shadow-sm" rows="2" [(ngModel)]="nuevoEquipo.descripcion"></textarea>
+            </div>
+          </div>
+          <div class="col-md-5">
+            <label class="fw-bold small text-secondary mb-1">Fotografía del Producto</label>
+            <div class="border-2 border-dashed border-primary rounded-4 bg-white d-flex flex-column align-items-center justify-content-center text-center p-4" 
+                 style="height: 200px; border-style: dashed !important; cursor: pointer;"
+                 (click)="fileInput.click()">
+              
+              <i *ngIf="!archivoSeleccionado" class="bi bi-cloud-arrow-up display-4 text-primary opacity-50 mb-2"></i>
+              <span *ngIf="!archivoSeleccionado" class="fw-bold text-dark small">Haz clic para seleccionar foto</span>
+              
+              <div *ngIf="archivoSeleccionado" class="h-100 w-100">
+                <i class="bi bi-file-earmark-image text-success display-6"></i>
+                <p class="small text-truncate mt-2">{{archivoSeleccionado.name}}</p>
+                <span class="badge bg-primary">Imagen lista</span>
+              </div>
+
+              <input type="file" #fileInput class="d-none" (change)="onFileSelected($event)" accept="image/*">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer border-0 bg-white p-3">
+        <button class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancelar</button>
+        <button class="btn btn-primary rounded-pill px-5" (click)="guardarNuevo()">GUARDAR EQUIPO</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalEditar" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+      <div class="modal-header bg-primary text-white border-0 py-3">
+        <h5 class="modal-title fw-bold m-0"><i class="bi bi-pencil-square me-2"></i>Editar: {{equipoSeleccionado?.nombre}}</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4 bg-light">
+        <div class="row g-4">
+          <div class="col-md-7">
+            <div class="mb-3">
+              <label class="fw-bold small text-secondary mb-1">Nombre</label>
+              <input type="text" class="form-control border-0 shadow-sm" [(ngModel)]="equipoSeleccionado.nombre">
+            </div>
+            <div class="row g-3 mb-3">
+              <div class="col-6">
+                <label class="fw-bold small text-secondary mb-1">Precio ($)</label>
+                <input type="number" class="form-control border-0 shadow-sm" [(ngModel)]="equipoSeleccionado.precio">
+              </div>
+              <div class="col-6">
+                <label class="fw-bold small text-secondary mb-1">Voltaje</label>
+                <select class="form-select border-0 shadow-sm" [(ngModel)]="equipoSeleccionado.voltaje">
+                  <option value="110v">110v</option>
+                  <option value="220v">220v</option>
+                </select>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="fw-bold small text-secondary mb-1">Descripción</label>
+              <textarea class="form-control border-0 shadow-sm" rows="3" [(ngModel)]="equipoSeleccionado.descripcion"></textarea>
+            </div>
+          </div>
+          <div class="col-md-5 text-center">
+            <label class="fw-bold small text-secondary mb-1 d-block">Imagen Actual / Nueva</label>
+            <div class="bg-dark rounded-4 mb-3 overflow-hidden position-relative" style="height: 180px; cursor: pointer;" (click)="fileEdit.click()">
+              <img [src]="equipoSeleccionado?.imgUrl ? 'http://localhost:3000' + equipoSeleccionado.imgUrl : 'https://images.unsplash.com/photo-1549558549-415fe4c37b60?auto=format&fit=crop&w=400&q=80'" class="w-100 h-100" style="object-fit: cover; opacity: 0.7;">
+              <div class="position-absolute top-50 start-50 translate-middle text-white">
+                <i class="bi bi-camera-fill fs-2"></i>
+                <p class="small fw-bold">Cambiar</p>
+              </div>
+            </div>
+            <input type="file" #fileEdit class="d-none" (change)="onFileSelected($event)" accept="image/*">
+            <p class="small text-primary fw-bold" *ngIf="archivoSeleccionado">Nueva imagen: {{archivoSeleccionado.name}}</p>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer border-0 bg-white p-3">
+        <button class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancelar</button>
+        <button class="btn btn-primary rounded-pill px-5" (click)="guardarEdicion()">ACTUALIZAR DATOS</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalEliminar" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg rounded-4">
+      <div class="modal-body text-center p-5">
+        <div class="bg-danger-subtle text-danger rounded-circle d-inline-flex p-3 mb-4">
+           <i class="bi bi-trash3-fill display-4"></i>
+        </div>
+        <h4 class="fw-bolder text-dark mb-2">¿Eliminar del catálogo?</h4>
+        <p class="text-muted mb-4">Vas a borrar definitivamente: <strong class="text-dark">{{equipoSeleccionado?.nombre}}</strong>.</p>
+        <div class="d-flex gap-2">
+          <button class="btn btn-light w-50 fw-bold border rounded-pill text-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button class="btn btn-danger w-50 fw-bold shadow-sm rounded-pill" (click)="eliminar()">Sí, Eliminar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .tracking-wide { letter-spacing: 0.05em; }
+  .tracking-wider { letter-spacing: 0.1em; }
+  .hover-bg-darker:hover { background-color: rgba(0,0,0,0.2); }
+  .hover-bg-danger-light:hover { background-color: #f8d7da; color: #dc3545 !important; }
+  .hover-lift { transition: transform 0.2s ease-in-out; }
+  .hover-lift:hover { transform: translateY(-5px); }
+</style>

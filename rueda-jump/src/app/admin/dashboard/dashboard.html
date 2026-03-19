@@ -1,65 +1,281 @@
-<div class="dashboard-view">
-  <header class="dashboard-header">
-    <h1>Resumen del Negocio</h1>
-    <p>Visualización en tiempo real de los servicios en Pachuca.</p>
-  </header>
+<div class="d-flex min-vh-100 bg-light flex-column flex-lg-row position-relative">
+  
+  <button class="btn btn-dark d-lg-none position-absolute top-0 start-0 m-3 z-3 rounded-pill shadow" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu">
+    <i class="bi bi-list fs-4"></i>
+  </button>
 
-  <div class="stats-grid">
-
-    <!-- INGRESOS -->
-    <div class="stat-card blue" (click)="irA('ingresos')" style="cursor: pointer;">
-      <div class="icon-box">💰</div>
-      <div class="stat-info">
-        <h4>Ingresos Mes</h4>
-        <p>$12,500</p>
-      </div>
+  <div class="offcanvas-lg offcanvas-start bg-dark text-white p-3 d-flex flex-column shadow-lg" tabindex="-1" id="sidebarMenu" style="width: 260px; min-width: 260px;">
+    
+    <div class="offcanvas-header d-lg-none border-bottom border-secondary mb-3">
+      <h5 class="offcanvas-title text-warning fw-bold m-0"><span class="fs-4">🎪</span> RUEDA JUMP</h5>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" data-bs-target="#sidebarMenu"></button>
     </div>
 
-    <!-- RENTAS -->
-    <div class="stat-card green" (click)="irA('rentas')" style="cursor: pointer;">
-      <div class="icon-box">📈</div>
-      <div class="stat-info">
-        <h4>Rentas Totales</h4>
-        <p>24</p>
+    <div class="text-center mb-4 mt-3 d-none d-lg-block">
+      <div class="bg-white rounded-circle d-inline-flex justify-content-center align-items-center mb-2 shadow" style="width: 60px; height: 60px;">
+        <span class="fs-2">🎪</span>
       </div>
+      <h4 class="fw-bolder text-warning mt-2 tracking-wide">RUEDA JUMP</h4>
+      <span class="badge bg-secondary rounded-pill fw-normal">Panel Admin</span>
     </div>
-
-    <!-- EQUIPOS -->
-    <div class="stat-card yellow" (click)="irA('equipos')" style="cursor: pointer;">
-      <div class="icon-box">🎈</div>
-      <div class="stat-info">
-        <h4>Equipos Activos</h4>
-        <p>8</p>
-      </div>
-    </div>
-
+    
+    <ul class="nav nav-pills flex-column mb-auto mt-2 gap-2">
+      <li class="nav-item">
+        <a routerLink="/admin/dashboard" routerLinkActive="active" class="nav-link text-white fw-bold rounded-3 py-2 px-3 shadow-sm bg-primary bg-gradient">
+          <i class="bi bi-speedometer2 me-2"></i> Dashboard
+        </a>
+      </li>
+      <li class="nav-item">
+        <a routerLink="/admin/calendario" routerLinkActive="active" class="nav-link text-white rounded-3 py-2 px-3 transition-all hover-bg-darker">
+          <i class="bi bi-calendar3-event me-2"></i> Calendario
+        </a>
+      </li>
+      <li class="nav-item">
+        <a routerLink="/admin/solicitudes" routerLinkActive="active" class="nav-link text-white rounded-3 py-2 px-3 transition-all hover-bg-darker">
+          <i class="bi bi-bell-fill me-2"></i> Solicitudes Web
+        </a>
+      </li>
+      <li class="nav-item">
+        <a routerLink="/admin/inventario" routerLinkActive="active" class="nav-link text-white rounded-3 py-2 px-3 transition-all hover-bg-darker">
+          <i class="bi bi-box-seam me-2"></i> Inventario
+        </a>
+      </li>
+      <li class="nav-item">
+        <a routerLink="/admin/clientes" routerLinkActive="active" class="nav-link text-white rounded-3 py-2 px-3 transition-all hover-bg-darker">
+          <i class="bi bi-people me-2"></i> Clientes
+        </a>
+      </li>
+    </ul>
+    <hr class="border-secondary opacity-25">
+    <a routerLink="/home" class="nav-link text-danger fw-bold text-center rounded-3 py-2 hover-bg-danger-light transition-all">
+      <i class="bi bi-door-open me-2"></i> Salir del Sistema
+    </a>
   </div>
 
-  <section class="activity-section">
-    <div class="section-header">
-      <h3>📅 Próximas Rentas</h3>
-      <button class="btn-text" (click)="irA('rentas')">Ver todo el calendario →</button>
+<div class="flex-grow-1 p-3 p-md-5 mt-5 mt-lg-0" style="overflow-y: auto; height: 100vh; padding-bottom: 5rem !important;">
+    
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 pb-3 border-bottom border-light-subtle">
+      <div class="animate__animated animate__fadeInLeft">
+        <h2 class="fw-bolder m-0 text-dark">Resumen del Negocio</h2>
+        <p class="text-muted small m-0 mt-1">Hola Admin, aquí tienes un vistazo rápido de cómo van las rentas.</p>
+      </div>
+      <div class="mt-3 mt-md-0 d-flex gap-2">
+         <span class="badge bg-white text-dark border shadow-sm px-3 py-2 rounded-pill"><i class="bi bi-calendar me-2"></i>Marzo 2026</span>
+      </div>
     </div>
 
-    <div class="table-container">
-      <table class="activity-table">
-        <thead>
-          <tr>
-            <th>Equipo</th>
-            <th>Cliente</th>
-            <th>Fecha</th>
-            <th>Estado</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Toro Mecánico</td>
-            <td>Joel (Admin)</td>
-            <td>13 Mar 2026</td>
-            <td><span class="badge busy">Ocupado</span></td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="row g-4 mb-5">
+      <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card border-0 shadow-sm rounded-4 h-100 hover-lift-subtle transition-all">
+          <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h6 class="text-muted fw-bold m-0 text-uppercase tracking-wider small">Ingresos (Mes)</h6>
+              <div class="bg-success-subtle text-success rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;"><i class="bi bi-cash-stack fs-5"></i></div>
+            </div>
+            <h3 class="fw-bolder text-dark mb-1">${{ingresosMes | number:'1.2-2'}}</h3>
+            <span class="badge bg-success-subtle text-success small"><i class="bi bi-arrow-up-short"></i> +12% vs mes pasado</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card border-0 shadow-sm rounded-4 h-100 hover-lift-subtle transition-all">
+          <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h6 class="text-muted fw-bold m-0 text-uppercase tracking-wider small">Equipos Activos</h6>
+              <div class="bg-primary-subtle text-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;"><i class="bi bi-box-seam fs-5"></i></div>
+            </div>
+            <h3 class="fw-bolder text-dark mb-1">{{equiposRentados}} <span class="fs-6 text-muted fw-normal">/ {{totalEquipos}}</span></h3>
+            <div class="mt-2">
+              <div class="d-flex justify-content-between small text-muted mb-1"><span>Ocupación</span><span>{{porcentajeOcupacion}}%</span></div>
+              <div class="progress" style="height: 6px;"><div class="progress-bar bg-primary rounded-pill" role="progressbar" [style.width]="porcentajeOcupacion + '%'"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card border-0 shadow-sm rounded-4 h-100 hover-lift-subtle transition-all">
+          <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h6 class="text-muted fw-bold m-0 text-uppercase tracking-wider small">Nuevos Clientes</h6>
+              <div class="bg-warning-subtle text-warning rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;"><i class="bi bi-people fs-5"></i></div>
+            </div>
+            <h3 class="fw-bolder text-dark mb-1">{{nuevosClientes}}</h3>
+            <span class="text-muted small">Registrados este mes</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card border-0 shadow-sm rounded-4 h-100 bg-primary text-white hover-lift-subtle transition-all" style="background: linear-gradient(135deg, var(--bs-primary) 0%, #0d6efd 100%); cursor: pointer;" routerLink="/admin/solicitudes">
+          <div class="card-body p-4 d-flex flex-column justify-content-center align-items-center text-center">
+            <i class="bi bi-bell-fill fs-2 mb-2 text-warning animate__animated animate__swing animate__infinite animate__slower"></i>
+            <h4 class="fw-bold mb-1">Solicitudes</h4>
+            <p class="small opacity-75 mb-3">Nuevas rentas web</p>
+            <button class="btn btn-light btn-sm fw-bold rounded-pill text-primary w-100 shadow-sm">Revisar Bandeja</button>
+          </div>
+        </div>
+      </div>
     </div>
-  </section>
+
+    <div class="row g-4">
+      <div class="col-12 col-lg-8">
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden h-100">
+          <div class="card-header bg-white border-bottom-0 pt-4 pb-0 px-4 d-flex justify-content-between align-items-center">
+            <h5 class="fw-bold m-0"><i class="bi bi-clock-history text-primary me-2"></i>Próximas Entregas</h5>
+            <a routerLink="/admin/calendario" class="btn btn-sm btn-outline-secondary rounded-pill fw-bold">Ver Calendario</a>
+          </div>
+          <div class="card-body p-0 mt-3">
+            <div class="table-responsive">
+              <table class="table table-hover align-middle m-0">
+                <thead class="table-light text-muted small text-uppercase tracking-wider">
+                  <tr>
+                    <th class="ps-4 fw-bold border-0">Cliente / Equipo</th>
+                    <th class="fw-bold border-0">Fecha y Hora</th>
+                    <th class="fw-bold border-0 text-center">Estado</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let r of proximasRentas" class="border-bottom border-light-subtle">
+                    <td class="ps-4 py-3">
+                      <div class="fw-bold text-dark">{{r.cliente}}</div>
+                      <div class="small text-muted"><i class="bi bi-box-seam me-1"></i>{{r.equipo}}</div>
+                    </td>
+                    <td class="py-3 text-secondary fw-medium">{{r.fecha}}</td>
+                    <td class="py-3 text-center">
+                      <span class="badge bg-{{r.color}}-subtle text-{{r.color}} rounded-pill px-3">{{r.estado}}</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-12 col-lg-4">
+        <div class="card border-0 shadow-sm rounded-4 h-100 bg-dark text-white p-4 d-flex flex-column justify-content-between position-relative overflow-hidden">
+          <i class="bi bi-calendar-plus position-absolute text-white opacity-10" style="font-size: 15rem; bottom: -50px; right: -30px;"></i>
+          <div class="position-relative z-index-1">
+            <h4 class="fw-bold text-warning mb-2">Crear Reserva</h4>
+            <p class="text-white-50 small mb-4">¿Te llamó un cliente directo? Registra su renta manualmente aquí.</p>
+          </div>
+          <button class="btn btn-warning fw-bold rounded-pill shadow position-relative z-index-1" data-bs-toggle="modal" data-bs-target="#modalNuevaReserva">
+            + NUEVA RENTA
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
+<div class="modal fade" id="modalNuevaReserva" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+      
+      <div class="modal-header bg-dark text-white border-0 py-3">
+        <h5 class="modal-title fw-bold m-0"><i class="bi bi-calendar-plus me-2 text-warning"></i>Registrar Nueva Renta</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      
+      <div class="modal-body p-4 bg-light">
+        <form>
+          <div class="mb-3">
+            <label class="fw-bold small text-secondary mb-1">Nombre del Cliente <span class="text-danger">*</span></label>
+            <input type="text" class="form-control border-0 shadow-sm" 
+                   [ngClass]="{'is-invalid': intentoEnvio && !nombreValido}"
+                   [(ngModel)]="nuevaReserva.cliente" name="cliente" placeholder="Ej. Pedro Picapiedra">
+            <div class="invalid-feedback fw-bold small">El nombre es obligatorio (mínimo 3 letras).</div>
+          </div>
+          
+          <div class="row g-3 mb-3">
+            <div class="col-6">
+              <label class="fw-bold small text-secondary mb-1">WhatsApp <span class="text-danger">*</span></label>
+              <input type="tel" class="form-control border-0 shadow-sm" maxlength="10"
+                     (keypress)="soloNumeros($event)"
+                     [ngClass]="{'is-invalid': intentoEnvio && !telefonoValido}"
+                     [(ngModel)]="nuevaReserva.tel" name="tel" placeholder="10 dígitos">
+              <div class="invalid-feedback fw-bold small">Deben ser exactamente 10 números.</div>
+            </div>
+            <div class="col-6">
+              <label class="fw-bold small text-secondary mb-1">Equipo <span class="text-danger">*</span></label>
+              <select class="form-select border-0 shadow-sm" 
+                      [ngClass]="{'is-invalid': intentoEnvio && !equipoValido}"
+                      [(ngModel)]="nuevaReserva.equipo" name="equipo">
+                <option value="" disabled>Selecciona...</option>
+                <option value="Toro Mecánico">Toro Mecánico</option>
+                <option value="Castillo Princesas">Castillo Princesas</option>
+                <option value="Acuático">Deslizador Acuático</option>
+              </select>
+              <div class="invalid-feedback fw-bold small">Selecciona un equipo de la lista.</div>
+            </div>
+          </div>
+          
+          <div class="row g-3">
+            <div class="col-6">
+              <label class="fw-bold small text-secondary mb-1">Fecha <span class="text-danger">*</span></label>
+              <input type="date" class="form-control border-0 shadow-sm" 
+                     [min]="minDate" [max]="maxDate"
+                     [ngClass]="{'is-invalid': intentoEnvio && !fechaValida}"
+                     [(ngModel)]="nuevaReserva.fecha" name="fecha">
+              <div class="invalid-feedback fw-bold small">Selecciona una fecha válida.</div>
+            </div>
+            <div class="col-6">
+              <label class="fw-bold small text-secondary mb-1">Hora <span class="text-danger">*</span></label>
+              <input type="time" class="form-control border-0 shadow-sm" 
+                     min="09:00" max="21:00"
+                     [ngClass]="{'is-invalid': intentoEnvio && !horaValida}"
+                     [(ngModel)]="nuevaReserva.hora" name="hora">
+              <div class="invalid-feedback fw-bold small">El horario es de 09:00 AM a 09:00 PM.</div>
+            </div>
+          </div>
+        </form>
+      </div>
+      
+      <div class="modal-footer border-0 bg-white p-3 d-flex gap-2">
+        <button class="btn btn-light fw-bold rounded-pill px-4 text-secondary border flex-grow-1" data-bs-dismiss="modal">Cancelar</button>
+        <button class="btn btn-warning fw-bold rounded-pill px-4 shadow-sm flex-grow-1" (click)="guardarReserva()">Guardar Reserva</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalErrorReserva" tabindex="-1" style="z-index: 1060;">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden animate__animated animate__shakeX">
+      <div class="modal-header bg-danger text-white border-0 py-3">
+        <h5 class="modal-title fw-bold m-0"><i class="bi bi-exclamation-triangle-fill me-2"></i>¡Atención!</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body text-center p-4">
+        <p class="fs-6 text-dark mb-0">Por favor, completa correctamente los campos marcados en rojo antes de guardar.</p>
+      </div>
+      <div class="modal-footer border-0 bg-light p-2">
+        <button class="btn btn-danger w-100 fw-bold rounded-pill" data-bs-dismiss="modal">Entendido</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalExitoReserva" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden animate__animated animate__zoomIn">
+      <div class="modal-body text-center p-5">
+        <div class="mb-4">
+           <i class="bi bi-check-circle-fill text-success" style="font-size: 5rem;"></i>
+        </div>
+        <h3 class="text-success fw-bold mb-2">¡Guardado!</h3>
+        <p class="text-muted mb-4">La renta manual se ha registrado en el sistema exitosamente.</p>
+        <button class="btn btn-success w-100 fw-bold rounded-pill shadow-sm" data-bs-dismiss="modal">Aceptar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .tracking-wide { letter-spacing: 0.05em; }
+  .tracking-wider { letter-spacing: 0.1em; }
+  .hover-bg-darker:hover { background-color: rgba(0,0,0,0.2); }
+  .hover-bg-danger-light:hover { background-color: #f8d7da; color: #dc3545 !important; }
+  .hover-lift-subtle { transition: transform 0.2s ease-in-out; }
+  .hover-lift-subtle:hover { transform: translateY(-3px); box-shadow: 0 .5rem 1rem rgba(0,0,0,.1) !important; }
+</style>
