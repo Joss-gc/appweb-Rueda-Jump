@@ -1,0 +1,22 @@
+import { Routes } from '@angular/router';
+import { Home } from './public/home/home';
+import { Catalogo } from './public/catalogo/catalogo';
+import { Checkout } from './public/checkout/checkout';
+import { Login } from './admin/login/login';
+import { Dashboard } from './admin/dashboard/dashboard';
+import { Clientes } from './admin/clientes/clientes';
+import { Calendario } from './admin/calendario/calendario';
+import { Inventario } from './admin/inventario/inventario';
+import { Solicitudes } from './admin/solicitudes/solicitudes';
+export const routes: Routes = [
+  { path: '', component: Home },
+  { path: 'catalogo', component: Catalogo },
+  { path: 'checkout', component: Checkout },
+  { path: 'admin/login', component: Login },
+  { path: 'admin/dashboard', component: Dashboard },
+  { path: 'admin/clientes', component: Clientes },
+  { path: 'admin/solicitudes', component: Solicitudes },
+  { path: 'admin/calendario', component: Calendario },
+  { path: 'admin/inventario', component: Inventario },
+  { path: '**', redirectTo: '' }
+];
