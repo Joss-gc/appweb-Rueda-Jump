@@ -1,0 +1,245 @@
+<main class="bg-light">
+
+  <section class="bg-primary text-white position-relative overflow-hidden pt-5 pb-5 shadow-lg mt-5 mt-lg-0">
+    <div class="container py-5 position-relative z-index-1">
+      <div class="row align-items-center">
+        <div class="col-lg-6 text-center text-lg-start mb-5 mb-lg-0 animate__animated animate__fadeInLeft">
+          <span class="badge bg-warning text-dark mb-3 px-3 py-2 rounded-pill fw-bold shadow-sm">Diversión Asegurada en Pachuca</span>
+          <h1 class="display-3 fw-bolder mb-3 text-shadow">Haz que tu evento sea inolvidable</h1>
+          <p class="lead mb-4 opacity-75">Renta de Toros Mecánicos, Inflables Acuáticos y Castillos con la mejor seguridad y limpieza.</p>
+          <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start">
+            <button routerLink="/catalogo" class="btn btn-warning btn-lg fw-bold shadow-lg rounded-pill px-5">
+              <i class="bi bi-cart-fill me-2"></i> VER CATÁLOGO
+            </button>
+            <button class="btn btn-outline-light btn-lg fw-bold rounded-pill px-5" 
+                    (click)="abrirModalAsesor()" data-bs-toggle="modal" data-bs-target="#modalAsesor">
+              <i class="bi bi-chat-dots me-2"></i> Contactar Asesor
+            </button>
+          </div>
+        </div>
+        <div class="col-lg-6 text-center animate__animated animate__zoomIn">
+          <div class="bg-white rounded-circle d-inline-flex align-items-center justify-content-center shadow-lg p-5" style="width: 280px; height: 280px;">
+            <i class="bi bi-balloon text-primary" style="font-size: 7rem;"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="container py-5 my-5">
+    <div class="text-center mb-5">
+      <h6 class="text-primary fw-bold text-uppercase tracking-wider">¿Por qué elegir Rueda Jump?</h6>
+      <h2 class="display-6 fw-bold text-dark">Servicio de Primera Calidad</h2>
+    </div>
+    <div class="row g-4 text-center">
+      <div class="col-md-4">
+        <div class="card h-100 shadow-sm border-0 py-5 rounded-4 hover-lift">
+          <div class="mb-4">
+            <span class="bg-primary-subtle text-primary rounded-circle p-4 d-inline-block shadow-sm">
+              <i class="bi bi-shield-check" style="font-size: 2.5rem;"></i>
+            </span>
+          </div>
+          <h4 class="fw-bold text-dark mb-3">Máxima Seguridad</h4>
+          <p class="text-muted px-4 mb-0">Equipos revisados constantemente y operadores capacitados.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card h-100 shadow-sm border-0 py-5 rounded-4 hover-lift">
+          <div class="mb-4">
+            <span class="bg-info-subtle text-info rounded-circle p-4 d-inline-block shadow-sm">
+              <i class="bi bi-stars" style="font-size: 2.5rem;"></i>
+            </span>
+          </div>
+          <h4 class="fw-bold text-dark mb-3">Higiene Total</h4>
+          <p class="text-muted px-4 mb-0">Sanitizamos profundamente cada equipo en cada evento.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card h-100 shadow-sm border-0 py-5 rounded-4 hover-lift">
+          <div class="mb-4">
+            <span class="bg-success-subtle text-success rounded-circle p-4 d-inline-block shadow-sm">
+              <i class="bi bi-clock-history" style="font-size: 2.5rem;"></i>
+            </span>
+          </div>
+          <h4 class="fw-bold text-dark mb-3">Puntualidad</h4>
+          <p class="text-muted px-4 mb-0">Llegamos a tiempo para que la fiesta empiece puntual.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-white py-5 border-top border-bottom">
+    <div class="container py-4">
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-5 px-3">
+        <div class="text-center text-md-start mb-3 mb-md-0">
+          <h6 class="text-warning fw-bold text-uppercase">Los más pedidos</h6>
+          <h2 class="display-6 fw-bold text-dark m-0">Equipos Destacados 🔥</h2>
+        </div>
+        <a routerLink="/catalogo" class="btn btn-outline-primary fw-bold rounded-pill px-4 shadow-sm">
+          Ver todo el catálogo <i class="bi bi-arrow-right ms-2"></i>
+        </a>
+      </div>
+
+      <div class="row g-4 justify-content-center">
+        <div class="col-12" *ngIf="cargando">
+          <div class="text-center py-4"><div class="spinner-border text-primary"></div></div>
+        </div>
+        <div class="col-md-4 col-sm-6" *ngFor="let prod of productosDestacados">
+          <div class="card h-100 shadow-sm border-0 overflow-hidden rounded-4 hover-lift">
+            <div class="bg-light text-center position-relative" style="height: 220px;">
+              <img [src]="prod.imgUrl ? 'http://127.0.0.1:3000' + prod.imgUrl : 'https://images.unsplash.com/photo-1549558549-415fe4c37b60?auto=format&fit=crop&w=400&q=80'" 
+                   class="w-100 h-100" style="object-fit: cover;" alt="Equipo">
+              <span class="position-absolute top-0 end-0 m-3 badge bg-danger rounded-pill shadow-sm">TOP</span>
+            </div>
+            <div class="card-body text-center p-4">
+              <span class="text-uppercase small fw-bold text-muted">{{prod.categoria || 'Equipo'}}</span>
+              <h5 class="card-title fw-bold mt-1 text-truncate">{{prod.nombre}}</h5>
+              <p class="text-success fs-4 fw-bold mb-3">${{prod.precio}}</p>
+              <button class="btn btn-primary w-100 fw-bold rounded-pill py-2 shadow" (click)="abrirReservaRapida(prod)">
+                Rentar Ahora
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+    
+  <section class="bg-dark text-white text-center py-5 shadow-lg">
+    <div class="container py-4">
+      <h2 class="fw-bold mb-3">¿Dudas sobre qué equipo elegir?</h2>
+      <p class="lead mb-4 opacity-75">Contáctanos y te asesoramos sin compromiso para encontrar la mejor opción.</p>
+      <button class="btn btn-success btn-lg fw-bold rounded-pill px-5 shadow-lg animate__animated animate__pulse animate__infinite" 
+              (click)="abrirModalAsesor()" data-bs-toggle="modal" data-bs-target="#modalAsesor">
+        <i class="bi bi-whatsapp me-2"></i> WhatsApp
+      </button>
+    </div>
+  </section>
+
+  <div class="modal fade" id="modalAsesor" tabindex="-1" style="z-index: 2000;">
+    <div class="modal-dialog modal-dialog-centered mx-3 mx-md-auto">
+      <div class="modal-content border-0 shadow-2xl rounded-4 overflow-hidden">
+        <div class="modal-header bg-success text-white border-0 py-3 shadow-sm">
+          <h5 class="modal-title fw-bold m-0"><i class="bi bi-whatsapp me-2"></i> Chat Rueda Jump</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body p-4 bg-light">
+          <div class="d-flex align-items-center mb-4">
+            <div class="bg-success text-white rounded-circle p-3 me-3 d-flex align-items-center justify-content-center shadow-sm" style="width: 50px; height: 50px;">
+              <i class="bi bi-headset fs-4"></i>
+            </div>
+            <div><h6 class="fw-bold mb-0">Asesoría Inmediata</h6><span class="text-muted small">Cuéntanos qué necesitas.</span></div>
+          </div>
+          <div class="form-group">
+            <label class="fw-bold text-secondary small mb-2">Tu mensaje:</label>
+            <textarea class="form-control border-0 shadow-sm p-3 rounded-4" rows="4" [(ngModel)]="mensajeAsesor" style="resize: none;" placeholder="Hola..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer border-0 bg-white p-3">
+          <button class="btn btn-light fw-bold px-4 rounded-pill border" data-bs-dismiss="modal">Cerrar</button>
+          <button class="btn btn-success fw-bold px-4 rounded-pill shadow flex-grow-1" (click)="enviarMensajeAsesor()" data-bs-dismiss="modal">Enviar Mensaje</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay d-flex p-2 p-md-3" *ngIf="mostrarModalReserva">
+    <div class="modal-dialog-custom w-100 my-auto mx-auto" style="max-width: 900px;">
+      <div class="modal-content-custom bg-white rounded-4 shadow-lg overflow-hidden position-relative animate__animated animate__zoomIn animate__faster d-flex flex-column flex-md-row">
+        
+        <button class="btn-close-custom shadow-sm" (click)="cerrarModalReserva()"><i class="bi bi-x-lg"></i></button>
+        
+        <div class="col-12 col-md-5 position-relative bg-light text-center" style="min-height: 250px;">
+          <img [src]="productoSeleccionado?.imgUrl ? 'http://127.0.0.1:3000' + productoSeleccionado.imgUrl : 'https://images.unsplash.com/photo-1549558549-415fe4c37b60?auto=format&fit=crop&w=400&q=80'" 
+               class="w-100 h-100 position-absolute top-0 start-0" style="object-fit: contain; padding: 1rem;">
+          <div class="position-absolute bottom-0 start-0 w-100 p-3 p-md-4 d-none d-md-block" style="background: linear-gradient(transparent, rgba(0,0,0,0.8));">
+            <h3 class="text-white fw-bold m-0 text-shadow fs-4 fs-md-3">{{productoSeleccionado?.nombre}}</h3>
+            <p class="text-warning fw-bolder fs-5 fs-md-4 m-0 text-shadow">${{productoSeleccionado?.precio}}</p>
+          </div>
+        </div>
+        
+        <div class="col-12 col-md-7 p-3 p-md-4 d-flex flex-column justify-content-center" style="max-height: 90vh; overflow-y: auto;">
+          <div class="d-md-none mb-3 text-center mt-3">
+            <h4 class="fw-bold m-0 text-dark">{{productoSeleccionado?.nombre}}</h4>
+            <p class="text-success fw-bolder fs-4 m-0">${{productoSeleccionado?.precio}}</p>
+            <hr class="my-2">
+          </div>
+
+          <div class="alert bg-primary-subtle border-primary text-primary small py-2 px-3 mb-3 rounded-pill d-flex align-items-center" *ngIf="!sesionIniciada">
+            <i class="bi bi-info-circle-fill me-2"></i> Reservando como Invitado. <a routerLink="/login" class="text-primary fw-bold ms-1">Inicia sesión aquí</a>.
+          </div>
+          <div class="alert bg-success-subtle border-success text-success small py-2 px-3 mb-3 rounded-pill d-flex align-items-center" *ngIf="sesionIniciada">
+            <i class="bi bi-check-circle-fill me-2"></i> ¡Hola! Cargamos tus datos de perfil automáticamente.
+          </div>
+
+          <h5 class="fw-bold text-dark mb-1 fs-6 fs-md-5"><i class="bi bi-calendar-check text-primary me-2"></i>Solicitar Renta</h5>
+          <form class="flex-grow-1 d-flex flex-column gap-2 mt-2">
+            
+            <div class="mb-1">
+              <label class="fw-bold small text-secondary mb-1">Nombre Completo *</label>
+              <input type="text" class="form-control bg-light border-0 py-2 form-control-sm" placeholder="Ej. Juan Pérez" maxlength="25"
+                     [readonly]="sesionIniciada" [ngClass]="{'is-invalid': intentoEnvio && !nombreValido, 'text-muted': sesionIniciada}"
+                     [(ngModel)]="solicitud.nombreCliente" name="nombre">
+              <div class="invalid-feedback small">Debe tener entre 3 y 25 letras.</div>
+            </div>
+            
+            <div class="row g-2 mb-1">
+              <div class="col-sm-6">
+                <label class="fw-bold small text-secondary mb-1">WhatsApp *</label>
+                <div class="input-group input-group-sm">
+                  <span class="input-group-text bg-light border-0" [ngClass]="{'bg-danger-subtle text-danger': intentoEnvio && !telefonoValido}"><i class="bi bi-whatsapp"></i></span>
+                  <input type="tel" class="form-control bg-light border-0" placeholder="10 dígitos" maxlength="10" 
+                         [readonly]="sesionIniciada" (keypress)="soloNumeros($event)" 
+                         [(ngModel)]="solicitud.telefono" name="tel" [ngClass]="{'is-invalid border-start-0': intentoEnvio && !telefonoValido, 'text-muted': sesionIniciada}">
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <label class="fw-bold small text-secondary mb-1">Fecha *</label>
+                <input type="date" class="form-control bg-light border-0 form-control-sm" [min]="minDate" [max]="maxDate" 
+                       [(ngModel)]="solicitud.fechaEvento" name="fecha" [ngClass]="{'is-invalid': intentoEnvio && !fechaValida}">
+              </div>
+            </div>
+
+            <div class="row g-2 mb-1">
+              <div class="col-sm-6">
+                <label class="fw-bold small text-secondary mb-1">Hora de entrega *</label>
+                <input type="time" class="form-control bg-light border-0 form-control-sm" min="09:00" max="21:00" 
+                       [(ngModel)]="solicitud.hora" name="hora" [ngClass]="{'is-invalid': intentoEnvio && !horaValida}">
+                <div class="invalid-feedback small">De 09:00 a 21:00.</div>
+              </div>
+              <div class="col-sm-6">
+                <label class="fw-bold small text-secondary mb-1">Dirección de Entrega *</label>
+                <input type="text" class="form-control bg-light border-0 form-control-sm" placeholder="Calle, número, etc." 
+                       [readonly]="sesionIniciada && solicitud.direccion.length >= 10"
+                       [(ngModel)]="solicitud.direccion" name="dir" [ngClass]="{'is-invalid': intentoEnvio && !direccionValida, 'text-muted': sesionIniciada && solicitud.direccion.length >= 10}">
+                <div class="invalid-feedback small">Mínimo 10 caracteres.</div>
+              </div>
+            </div>
+            
+            <button class="btn btn-primary w-100 fw-bold rounded-pill py-2 py-md-3 mt-3 shadow-sm" (click)="enviarSolicitudReserva()">
+              <span *ngIf="!enviandoReserva">ENVIAR SOLICITUD</span>
+              <span *ngIf="enviandoReserva" class="spinner-border spinner-border-sm me-2"></span>
+              <span *ngIf="enviandoReserva">PROCESANDO...</span>
+            </button>
+            <div class="d-md-none" style="height: 100px;"></div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modalErrorReservaHome" tabindex="-1" style="z-index: 10000;"><div class="modal-dialog modal-dialog-centered modal-sm mx-2 mx-md-auto"><div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden animate__animated animate__shakeX"><div class="modal-header bg-danger text-white border-0 py-3"><h5 class="modal-title fw-bold m-0 fs-6">¡Atención!</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body text-center p-3"><p class="small text-dark mb-0">Revisa los campos marcados en rojo. Horario válido: 9:00 AM - 9:00 PM.</p></div><div class="modal-footer border-0 bg-light p-2"><button class="btn btn-danger btn-sm w-100 fw-bold rounded-pill py-2" data-bs-dismiss="modal">Entendido</button></div></div></div></div>
+  <div class="modal fade" id="modalExitoReservaHome" tabindex="-1" style="z-index: 10000;"><div class="modal-dialog modal-dialog-centered modal-sm mx-2 mx-md-auto"><div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden animate__animated animate__zoomIn"><div class="modal-body text-center p-4"><i class="bi bi-check-circle-fill text-success mb-3 d-block" style="font-size: 3rem;"></i><h4 class="text-success fw-bold mb-2">¡Recibido!</h4><p class="text-muted small mb-4">Tu solicitud se ha enviado. Te contactaremos pronto.</p><button class="btn btn-success btn-sm w-100 fw-bold rounded-pill py-2 shadow-sm" data-bs-dismiss="modal">Aceptar</button></div></div></div></div>
+
+</main>
+
+<style>
+  .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.7); z-index: 9999; backdrop-filter: blur(5px); overflow-y: auto; }
+  .modal-content-custom { overflow: visible; }
+  .btn-close-custom { position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.9); border: none; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #333; z-index: 1050; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+  .btn-close-custom:hover { background: #fff; transform: scale(1.1); color: #dc3545; }
+  .text-shadow { text-shadow: 1px 1px 3px rgba(0,0,0,0.6); }
+  .hover-lift { transition: transform 0.2s; }
+  .hover-lift:hover { transform: translateY(-5px); }
+  @media (max-width: 575.98px) { .btn-close-custom { width: 25px; height: 25px; font-size: 0.8rem; top: 8px; right: 8px;} }
+</style>
