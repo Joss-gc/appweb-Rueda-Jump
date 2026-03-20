@@ -1,64 +1,95 @@
 const express = require('express');
 const router = express.Router();
-const Reserva = require('../models/reserva');
-const Cliente = require('../models/cliente'); // 🚩 IMPORTANTE: Importar el modelo de Cliente
+const Reserva = require('../models/reserva'); // Verifica que este nombre coincida con tu modelo real
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 
-// 1. Obtener todas las reservas (Para Dashboard y Calendario)
-// Obtener todas las reservas (Para que el Admin las vea)
+// 🚩 CONFIGURACIÓN MULTER PARA COMPROBANTES
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const pathDir = path.join(__dirname, '../public/comprobantes');
+    if (!fs.existsSync(pathDir)) {
+      fs.mkdirSync(pathDir, { recursive: true });
+    }
+    cb(null, pathDir);
+  },
+  filename: (req, file, cb) => {
+    // Generamos un nombre único para que no se sobreescriban fotos
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, 'pago_' + uniqueSuffix + path.extname(file.originalname));
+  }
+});
+const upload = multer({ storage });
+
+// Obtener todas las reservas
 router.get('/', async (req, res) => {
   try {
-    // Buscamos todas las reservas y las ordenamos por la más reciente
     const reservas = await Reserva.find().sort({ fechaCreacion: -1 });
-    res.json(reservas); // 🚩 Esto es lo que Angular recibe
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.json(reservas);
+  } catch (err) { 
+    res.status(500).json({ error: err.message }); 
   }
 });
 
-router.post('/', async (req, res) => {
-  console.log("--- 📥 Recibiendo petición de Angular ---");
+// Obtener por teléfono del cliente
+router.get('/cliente/:telefono', async (req, res) => {
   try {
-    // 1. Guardamos la reserva primero (lo que más importa)
+    const { telefono } = req.params;
+    const reservas = await Reserva.find({ telefono: telefono }).sort({ fechaCreacion: -1 });
+    res.json(reservas);
+  } catch (err) { 
+    res.status(500).json({ error: err.message }); 
+  }
+});
+
+// Crear nueva reserva
+router.post('/', async (req, res) => {
+  try {
     const nuevaReserva = new Reserva(req.body);
     await nuevaReserva.save();
-    console.log("✅ 1. Reserva guardada en MongoDB");
-
-    // 2. Intentamos guardar el cliente (en un bloque aparte para que no rompa la reserva)
-    try {
-      const { nombreCliente, telefono } = req.body;
-      const clienteExistente = await Cliente.findOne({ tel: telefono });
-      if (!clienteExistente) {
-        await new Cliente({ nombre: nombreCliente, tel: telefono }).save();
-        console.log("✅ 2. Cliente nuevo registrado");
-      }
-    } catch (e) {
-      console.log("⚠️ Nota: El cliente no se guardó, pero la reserva sí:", e.message);
-    }
-
-    // 🚩 3. LA RESPUESTA MÁGICA: Mandamos un 201 y cerramos la conexión
-    console.log("🚀 Enviando señal de éxito a Angular...");
-    return res.status(201).send({ ok: true, mensaje: '¡Listo!' });
-
+    return res.status(201).send({ ok: true, mensaje: '¡Listo!', reserva: nuevaReserva });
   } catch (err) {
-    console.error("❌ Error crítico:", err.message);
-    // Si algo falla, avisamos de inmediato para que Angular no espere
     return res.status(500).send({ ok: false, error: err.message });
   }
 });
 
-// 3. Actualizar estado (Aprobar/Rechazar desde el Dashboard)
-// Actualizar estado (Aprobar/Rechazar)
+// 🚩 ACTUALIZAR CUALQUIER DATO (Esto usa el Admin para poner "Pagado" o "Confirmado")
 router.put('/:id', async (req, res) => {
   try {
-    // Solo actualizamos el campo 'estado', dejamos lo demás intacto
     const reservaActualizada = await Reserva.findByIdAndUpdate(
       req.params.id, 
-      { estado: req.body.estado }, // 🚩 SOLO actualizamos el estado
+      { $set: req.body }, // 🚩 ESTO ES VITAL
       { new: true }
     );
     res.json(reservaActualizada);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(400).json({ message: err.message });
+  }
+});
+
+// 🚩 LA RUTA QUE FALTABA: SUBIR COMPROBANTE DE PAGO
+// Nota que aquí sí usamos 'upload.single("comprobante")' y la ruta es '/:id/pago'
+router.put('/:id/pago', upload.single('comprobante'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: "No se subió ningún archivo." });
+    }
+
+    // Guardamos la URL de la foto y pasamos a En Revisión automáticamente
+    const reservaActualizada = await Reserva.findByIdAndUpdate(
+      req.params.id, 
+      { 
+        $set: { 
+          comprobanteUrl: `/comprobantes/${req.file.filename}`,
+          estadoPago: 'En Revisión' 
+        } 
+      }, 
+      { new: true }
+    );
+    res.json(reservaActualizada);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
   }
 });
 
