@@ -1,0 +1,241 @@
+<div class="container min-vh-100 pt-5 mt-5">
+  
+  <div class="text-center py-5 mt-4" *ngIf="cargando">
+    <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;"></div>
+    <h5 class="text-secondary fw-medium">Cargando tu información...</h5>
+  </div>
+
+  <div class="alert alert-danger text-center fw-bold mt-4 shadow-sm" *ngIf="mensajeError">
+    <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ mensajeError }}
+    <br><button class="btn btn-sm btn-outline-danger mt-3" (click)="cerrarSesion()">Volver al Login</button>
+  </div>
+
+  <div *ngIf="!cargando && miPerfil" class="row g-4 animate__animated animate__fadeIn mt-2">
+    
+    <div class="col-lg-4">
+      <div class="card border-0 shadow-sm rounded-4 text-center p-4 bg-white">
+        <div class="position-relative mx-auto mb-3" style="width: 110px;">
+          <div *ngIf="!miPerfil?.fotoUrl" class="bg-primary bg-gradient text-white rounded-circle d-flex justify-content-center align-items-center shadow-sm" style="width: 110px; height: 110px; font-size: 3rem; font-weight: bold;">
+            {{ miPerfil?.nombre?.charAt(0) | uppercase }}
+          </div>
+          <img *ngIf="miPerfil?.fotoUrl" [src]="getFotoUrl()" class="rounded-circle shadow-sm border border-3 border-white" style="width: 110px; height: 110px; object-fit: cover;" onerror="this.src='https://ui-avatars.com/api/?name=Error&background=random'">
+          
+          <input type="file" #fileInput style="display: none" (change)="onFotoSelected($event)" accept="image/*">
+          
+          <button class="btn btn-sm btn-light position-absolute bottom-0 end-0 rounded-circle shadow-sm border" (click)="fileInput.click()" title="Cambiar foto">
+            <i class="bi bi-camera-fill text-primary" *ngIf="!enviandoCambios"></i>
+            <span class="spinner-border spinner-border-sm text-primary" *ngIf="enviandoCambios"></span>
+          </button>
+        </div>
+        
+        <h4 class="fw-bolder text-dark mb-1">{{ miPerfil?.nombre }}</h4>
+        <p class="text-muted small mb-3"><i class="bi bi-envelope-fill me-1"></i> {{ miPerfil?.correo }}</p>
+        
+        <span class="badge rounded-pill mb-4 px-3 py-2 shadow-sm" 
+              [ngClass]="{'bg-success-subtle text-success': miPerfil?.tipo === 'Frecuente', 'bg-info-subtle text-info': miPerfil?.tipo === 'Nuevo', 'bg-secondary-subtle text-secondary': miPerfil?.tipo === 'Ocasional' || !miPerfil?.tipo}">
+          Cliente {{ miPerfil?.tipo || 'Registrado' }}
+        </span>
+
+        <hr class="border-light-subtle mb-4">
+        
+        <button class="btn btn-outline-danger w-100 rounded-pill fw-bold shadow-sm" (click)="cerrarSesion()">
+          <i class="bi bi-box-arrow-right me-2"></i> Cerrar Sesión
+        </button>
+      </div>
+    </div>
+
+    <div class="col-lg-8">
+      
+      <div class="card border-0 shadow-sm rounded-4 mb-4 bg-white">
+        <div class="card-header bg-transparent border-bottom-0 pt-4 pb-0 px-4">
+          <h5 class="fw-bolder text-dark m-0"><i class="bi bi-geo-alt-fill text-danger me-2"></i> Mis Datos de Envío</h5>
+        </div>
+        <div class="card-body p-4">
+          <div class="row g-4 bg-light p-3 rounded-4 border border-light-subtle">
+            <div class="col-md-6">
+              <label class="small fw-bold text-secondary text-uppercase tracking-wider">Teléfono de Contacto</label>
+              <div class="d-flex align-items-center mt-1">
+                <i class="bi bi-whatsapp text-success fs-5 me-2"></i>
+                <span class="text-dark fw-bold fs-6">{{ miPerfil?.telefono }}</span>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="small fw-bold text-secondary text-uppercase tracking-wider">Código Postal</label>
+              <div class="mt-1"><span class="text-dark fw-bold fs-6">{{ miPerfil?.direccion?.cp || '---' }}</span></div>
+            </div>
+            <div class="col-12 border-top border-light-subtle pt-3 mt-3">
+              <label class="small fw-bold text-secondary text-uppercase tracking-wider">Dirección Completa</label>
+              <p class="mb-1 text-dark fw-bold fs-6 mt-1">{{ miPerfil?.direccion?.calle || 'Calle no registrada' }}</p>
+              <p class="text-muted mb-0">Colonia: {{ miPerfil?.direccion?.colonia || 'No registrada' }}</p>
+            </div>
+          </div>
+          <div class="mt-4 text-end">
+            <button class="btn btn-light border shadow-sm rounded-pill fw-bold text-primary px-4 hover-lift-subtle" (click)="abrirModal()">
+              <i class="bi bi-pencil-square me-2"></i> Editar mis datos
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card border-0 shadow-sm rounded-4 bg-white mb-5">
+        <div class="card-header bg-transparent border-bottom-0 pt-4 pb-0 px-4 d-flex justify-content-between align-items-center">
+          <h5 class="fw-bolder text-dark m-0"><i class="bi bi-bag-check-fill text-primary me-2"></i> Mis Pedidos y Rentas</h5>
+          <span class="badge bg-primary rounded-pill shadow-sm px-3 py-2">{{ miPerfil?.misRentas?.length || 0 }} Totales</span>
+        </div>
+        
+        <div class="card-body p-4">
+          <div class="text-center py-5" *ngIf="!miPerfil?.misRentas?.length">
+            <div class="bg-light rounded-circle d-flex justify-content-center align-items-center mx-auto mb-4" style="width: 100px; height: 100px;">
+              <i class="bi bi-box-seam text-muted opacity-50" style="font-size: 3rem;"></i>
+            </div>
+            <h5 class="text-dark fw-bold">Aún no tienes rentas activas.</h5>
+            <a routerLink="/" class="btn btn-primary bg-gradient rounded-pill px-5 shadow fw-bold mt-3 py-2">Explorar Catálogo</a>
+          </div>
+
+          <div class="table-responsive" *ngIf="miPerfil?.misRentas?.length > 0">
+            <table class="table table-hover align-middle border-light-subtle m-0">
+              <thead class="bg-light text-secondary small text-uppercase tracking-wider">
+                <tr>
+                  <th class="ps-3 border-0 rounded-start">Evento / Costo</th>
+                  <th class="border-0">Fecha</th>
+                  <th class="border-0 text-center">Estado Renta</th>
+                  <th class="pe-3 border-0 text-center rounded-end">Acción Pago</th> 
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let renta of miPerfil.misRentas" class="animate__animated animate__fadeInUp">
+                  
+                  <td class="ps-3 py-3 border-light-subtle">
+                    <span class="fw-bold text-dark d-block">{{ renta.equipo }}</span>
+                    <span class="text-success small fw-bold"><i class="bi bi-cash me-1"></i> Total: ${{renta.precio || '800'}}.00</span>
+                  </td>
+                  
+                  <td class="border-light-subtle">
+                    <span class="text-muted d-block small"><i class="bi bi-calendar-event me-1"></i>{{ renta.fechaEvento | date:'dd/MMM/yy' }}</span>
+                    <span class="text-muted small fw-bold"><i class="bi bi-clock me-1"></i>{{ renta.hora }} hrs</span>
+                  </td>
+                  
+                  <td class="text-center border-light-subtle">
+                    <span class="badge rounded-pill px-3 py-2 shadow-sm" 
+                          [ngClass]="{
+                            'bg-warning-subtle text-warning border border-warning': renta.estado === 'Pendiente',
+                            'bg-success-subtle text-success border border-success': renta.estado === 'Aprobado' || renta.estado === 'Confirmado',
+                            'bg-danger-subtle text-danger border border-danger': renta.estado === 'Rechazado'
+                          }">
+                      {{ renta.estado | uppercase }}
+                    </span>
+                  </td>
+                  
+                  <td class="text-center border-light-subtle pe-3">
+                    <input type="file" #filePago style="display: none" (change)="onPagoSelected($event, renta._id)" accept="image/*,application/pdf">
+
+                    <span *ngIf="renta.estado === 'Rechazado'" class="text-danger small fw-bold">
+                      <i class="bi bi-x-circle me-1"></i>Cancelada
+                    </span>
+
+                    <span *ngIf="renta.estadoPago === 'Pagado' && renta.estado !== 'Rechazado'" class="badge bg-success-subtle text-success border border-success rounded-pill px-3 py-2 shadow-sm fw-bold">
+                      <i class="bi bi-check-circle-fill me-1"></i> PAGADO
+                    </span>
+
+                    <span *ngIf="renta.estadoPago === 'En Revisión' && renta.estado !== 'Rechazado'" class="badge bg-warning text-dark rounded-pill px-3 py-2 border border-warning shadow-sm fw-bold">
+                      <i class="bi bi-eye me-1"></i> En Revisión
+                    </span>
+
+                    <button *ngIf="renta.estado !== 'Rechazado' && renta.estadoPago !== 'Pagado' && renta.estadoPago !== 'En Revisión'" 
+                            class="btn btn-sm btn-primary rounded-pill fw-bold shadow-sm px-3 mb-0" 
+                            (click)="filePago.click()" 
+                            [disabled]="subiendoPagoId === renta._id">
+                      <span *ngIf="subiendoPagoId !== renta._id"><i class="bi bi-cloud-upload me-1"></i> Pagar Ahora</span>
+                      <span *ngIf="subiendoPagoId === renta._id" class="spinner-border spinner-border-sm"></span>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay d-flex p-3" *ngIf="mostrarModalEditar">
+  <div class="card border-0 shadow-lg rounded-4 w-100 mx-auto animate__animated animate__zoomIn animate__faster" style="max-width: 600px;">
+    <div class="card-header bg-primary text-white p-4 border-0 d-flex justify-content-between align-items-center">
+      <h5 class="m-0 fw-bold"><i class="bi bi-pencil-square me-2"></i>Editar mi Información</h5>
+      <button class="btn-close btn-close-white" (click)="mostrarModalEditar = false"></button>
+    </div>
+    <div class="card-body p-4 overflow-auto" style="max-height: 70vh;">
+      <form #formEditar="ngForm">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="small fw-bold text-secondary">Nombre Completo</label>
+            <input type="text" class="form-control border-0 bg-light" [(ngModel)]="datosEditados.nombre" name="nom">
+          </div>
+          <div class="col-md-6">
+            <label class="small fw-bold text-secondary">WhatsApp</label>
+            <input type="text" class="form-control border-0 bg-light" [(ngModel)]="datosEditados.telefono" name="tel">
+          </div>
+          <div class="col-12">
+            <label class="small fw-bold text-secondary">Calle y Número</label>
+            <input type="text" class="form-control border-0 bg-light" [(ngModel)]="datosEditados.direccion.calle" name="calle">
+          </div>
+          <div class="col-md-6">
+            <label class="small fw-bold text-secondary">Colonia</label>
+            <input type="text" class="form-control border-0 bg-light" [(ngModel)]="datosEditados.direccion.colonia" name="col">
+          </div>
+          <div class="col-md-6">
+            <label class="small fw-bold text-secondary">Código Postal</label>
+            <input type="text" class="form-control border-0 bg-light" [(ngModel)]="datosEditados.direccion.cp" name="cp">
+          </div>
+          <div class="col-12">
+            <label class="small fw-bold text-secondary">Referencias para llegar</label>
+            <textarea class="form-control border-0 bg-light" rows="2" [(ngModel)]="datosEditados.direccion.referencias" name="ref"></textarea>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="card-footer bg-white p-4 border-0 d-flex gap-2">
+      <button class="btn btn-light flex-grow-1 fw-bold rounded-pill" (click)="mostrarModalEditar = false">Cancelar</button>
+      <button class="btn btn-primary flex-grow-1 fw-bold rounded-pill shadow" (click)="guardarCambios()" [disabled]="enviandoCambios">
+        <span *ngIf="!enviandoCambios">Guardar Cambios</span>
+        <span *ngIf="enviandoCambios" class="spinner-border spinner-border-sm me-2"></span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalExitoPerfil" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+      <div class="modal-body text-center p-4">
+        <div class="bg-success-subtle text-success rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 70px; height: 70px;">
+          <i class="bi bi-check-circle-fill fs-1"></i>
+        </div>
+        <h4 class="fw-bold text-dark">{{ tituloExito }}</h4>
+        <p class="text-secondary small mb-4">{{ mensajeExito }}</p>
+        <button type="button" class="btn btn-success w-100 rounded-pill fw-bold shadow-sm py-2" data-bs-dismiss="modal">
+          Aceptar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .tracking-wider { letter-spacing: 0.1em; }
+  .hover-lift-subtle { transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; }
+  .hover-lift-subtle:hover { transform: translateY(-2px); box-shadow: 0 .25rem .5rem rgba(0,0,0,.15) !important; }
+  
+  .modal-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+</style>

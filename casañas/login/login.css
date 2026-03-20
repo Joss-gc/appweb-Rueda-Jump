@@ -1,0 +1,13 @@
+.tracking-wide {
+  letter-spacing: 0.1em;
+}
+
+/* Transición suave para el contenedor principal cuando cambia de Login a Registro */
+main > div {
+  transition: max-width 0.4s ease-in-out;
+}
+
+/* Evitamos que el formulario salte de golpe al cargar */
+.animate__animated {
+  animation-duration: 0.4s;
+}
