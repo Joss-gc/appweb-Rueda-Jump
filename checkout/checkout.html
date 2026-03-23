@@ -1,0 +1,85 @@
+<div class="container py-5 min-vh-100 d-flex align-items-center justify-content-center">
+  <div class="card shadow-lg border-0 w-100" style="max-width: 500px; border-radius: 1rem; overflow: hidden;">
+    
+    <div class="card-header bg-primary text-white text-center py-4 border-0">
+      <h3 class="mb-0 fw-bold"><i class="bi bi-calendar2-check me-2"></i>Finalizar Reservación</h3>
+      <p class="mb-0 small opacity-75">Estás rentando: <strong>{{equipoNombre}}</strong></p>
+    </div>
+
+    <div class="bg-primary-subtle px-4 py-3 border-bottom border-primary-subtle text-primary fw-medium small" *ngIf="!sesionIniciada && !solicitudEnviada && !cargandoDatosCliente">
+      <i class="bi bi-info-circle-fill me-2"></i> Estás reservando como Invitado. <a routerLink="/login" class="text-primary fw-bold text-decoration-underline">Inicia sesión aquí</a>.
+    </div>
+
+    <div class="text-center py-5" *ngIf="cargandoDatosCliente">
+      <div class="spinner-border text-primary" role="status"></div>
+      <p class="text-muted small mt-2 fw-medium">Autocompletando tus datos...</p>
+    </div>
+
+    <div class="card-body p-4 p-md-5" *ngIf="!solicitudEnviada && !cargandoDatosCliente">
+      <form>
+        <div class="mb-4">
+          <label class="form-label fw-bold text-secondary small mb-1">Nombre Completo <span class="text-danger">*</span></label>
+          <input type="text" class="form-control form-control-lg bg-light border-0 shadow-none" 
+                 maxlength="50"
+                 [ngClass]="{'is-invalid': intentoEnvio && !nombreValido}"
+                 [(ngModel)]="nombre" name="nombre" placeholder="Ej. Juan Pérez">
+          <div class="invalid-feedback fw-bold small">Ingresa tu nombre real.</div>
+        </div>
+
+        <div class="mb-4">
+          <label class="form-label fw-bold text-secondary small mb-1">WhatsApp <span class="text-danger">*</span></label>
+          <div class="input-group">
+            <span class="input-group-text bg-light border-0"><i class="bi bi-whatsapp text-success"></i></span>
+            <input type="tel" class="form-control form-control-lg bg-light border-0 shadow-none" 
+                   maxlength="10" (keypress)="soloNumeros($event)"
+                   [ngClass]="{'is-invalid': intentoEnvio && !telefonoValido}"
+                   [(ngModel)]="telefono" name="telefono" placeholder="Ej. 7711234567">
+            <div class="invalid-feedback fw-bold small">10 dígitos obligatorios.</div>
+          </div>
+        </div>
+
+        <div class="row g-3 mb-4">
+          <div class="col-6">
+            <label class="form-label fw-bold text-secondary small mb-1">Fecha <span class="text-danger">*</span></label>
+            <input type="date" class="form-control form-control-lg bg-light border-0 shadow-none" 
+                   [min]="minDate" [max]="maxDate"
+                   [ngClass]="{'is-invalid': intentoEnvio && !fechaValida}"
+                   [(ngModel)]="fecha" name="fecha">
+          </div>
+          <div class="col-6">
+            <label class="form-label fw-bold text-secondary small mb-1">Hora <span class="text-danger">*</span></label>
+            <input type="time" class="form-control form-control-lg bg-light border-0 shadow-none" 
+                   [ngClass]="{'is-invalid': intentoEnvio && !horaValida}"
+                   [(ngModel)]="hora" name="hora">
+          </div>
+        </div>
+
+        <button type="button" class="btn btn-warning btn-lg w-100 fw-bold shadow-sm rounded-pill mt-2" 
+                (click)="enviarSolicitud()" [disabled]="cargando">
+          <span *ngIf="!cargando">SOLICITAR RENTA AHORA</span>
+          <span *ngIf="cargando" class="spinner-border spinner-border-sm me-2"></span>
+          <span *ngIf="cargando">ENVIANDO...</span>
+        </button>
+      </form>
+    </div>
+
+    <div class="card-body text-center p-5" *ngIf="solicitudEnviada">
+      <div class="mb-4 animate__animated animate__bounceIn">
+         <i class="bi bi-check-circle-fill text-success" style="font-size: 5rem;"></i>
+      </div>
+      <h2 class="text-success fw-bold mb-3">¡Solicitud Enviada!</h2>
+      <p class="text-muted mb-4">Aparecerá en el sistema de Rueda Jump. Nos comunicaremos al <strong>{{telefono}}</strong>.</p>
+      <button class="btn btn-primary btn-lg rounded-pill px-5 fw-bold" routerLink="/">Volver al Inicio</button>
+    </div>
+  </div>
+
+  <div class="modal d-block" tabindex="-1" *ngIf="mostrarError" style="background: rgba(0,0,0,0.5); z-index: 1060;">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+        <div class="modal-header bg-danger text-white border-0"><h5 class="modal-title fw-bold">¡Atención!</h5><button type="button" class="btn-close btn-close-white" (click)="cerrarError()"></button></div>
+        <div class="modal-body text-center p-4"><p>Hubo un error al procesar tu reserva. Revisa los datos o intenta más tarde.</p></div>
+        <div class="modal-footer bg-light border-0"><button class="btn btn-danger w-100 fw-bold rounded-pill" (click)="cerrarError()">Corregir</button></div>
+      </div>
+    </div>
+  </div>
+</div>
