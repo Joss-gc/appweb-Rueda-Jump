@@ -1,0 +1,41 @@
+<div class="d-flex align-items-center justify-content-center min-vh-100 bg-primary">
+  
+  <div class="card shadow-lg border-0" style="max-width: 400px; width: 100%; border-radius: 20px;">
+    <div class="card-body p-5 text-center">
+      
+      <div class="mb-4">
+        <span class="display-1 text-primary">🔒</span>
+      </div>
+
+      <h3 class="fw-bold mb-4 text-dark">Acceso Administrativo</h3>
+
+      <div class="alert alert-danger py-2" *ngIf="mensajeError">
+        {{ mensajeError }}
+      </div>
+
+      <form (ngSubmit)="iniciarSesion()">
+        
+        <div class="input-group mb-3">
+          <span class="input-group-text bg-light border-end-0">👤</span>
+          <input type="text" class="form-control form-control-lg bg-light border-start-0" 
+                 placeholder="Usuario" name="usuario" [(ngModel)]="usuario" required>
+        </div>
+
+        <div class="input-group mb-4">
+          <span class="input-group-text bg-light border-end-0">🔑</span>
+          <input type="password" class="form-control form-control-lg bg-light border-start-0" 
+                 placeholder="Contraseña" name="contrasena" [(ngModel)]="contrasena" required>
+        </div>
+
+        <button type="submit" class="btn btn-warning btn-lg w-100 fw-bold rounded-pill mb-4 shadow-sm">
+          ENTRAR AL PANEL
+        </button>
+      </form>
+
+      <a routerLink="/catalogo" class="text-decoration-none text-muted fw-bold hover-primary">
+        ← Volver al Catálogo
+      </a>
+
+    </div>
+  </div>
+</div>

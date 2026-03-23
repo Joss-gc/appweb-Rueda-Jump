@@ -1,0 +1,32 @@
+<button class="btn btn-dark d-lg-none position-fixed top-0 start-0 m-3 z-3 rounded-pill shadow" type="button" data-bs-toggle="offcanvas" data-bs-target="#adminSidebar">
+  <i class="bi bi-list fs-4"></i>
+</button>
+
+<div class="offcanvas-lg offcanvas-start bg-dark text-white p-3 d-flex flex-column shadow h-100" tabindex="-1" id="adminSidebar" style="width: 260px;">
+  
+  <div class="offcanvas-header d-lg-none border-bottom border-secondary mb-3">
+    <h5 class="offcanvas-title text-warning fw-bold">RUEDA JUMP</h5>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" data-bs-target="#adminSidebar"></button>
+  </div>
+
+  <div class="offcanvas-body d-flex flex-column h-100 p-0">
+    <div class="text-center mb-4 mt-3 d-none d-lg-block">
+      <span class="display-5">🎪</span>
+      <h4 class="fw-bold text-warning mt-2">RUEDA JUMP</h4>
+      <span class="badge bg-secondary">Panel Admin</span>
+    </div>
+
+    <ul class="nav nav-pills flex-column mb-auto">
+      <li class="nav-item mb-2"><a routerLink="/admin/dashboard" routerLinkActive="active" class="nav-link text-white"><i class="bi bi-speedometer2 me-2"></i> Dashboard</a></li>
+      <li class="nav-item mb-2"><a routerLink="/admin/calendario" routerLinkActive="active" class="nav-link text-white"><i class="bi bi-calendar3 me-2"></i> Calendario</a></li>
+      <li class="nav-item mb-2"><a routerLink="/admin/solicitudes" routerLinkActive="active" class="nav-link text-white"><i class="bi bi-bell-fill me-2"></i> Solicitudes</a></li>
+      <li class="nav-item mb-2"><a routerLink="/admin/inventario" routerLinkActive="active" class="nav-link text-white fw-bold"><i class="bi bi-box-seam me-2"></i> Inventario</a></li>
+      <li class="nav-item mb-2"><a routerLink="/admin/clientes" routerLinkActive="active" class="nav-link text-white"><i class="bi bi-people me-2"></i> Clientes</a></li>
+    </ul>
+
+    <hr>
+    <div class="pb-3 text-center">
+        <a routerLink="/home" class="nav-link text-danger fw-bold"><i class="bi bi-door-open me-2"></i> Salir</a>
+    </div>
+  </div>
+</div>

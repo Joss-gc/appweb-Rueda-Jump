@@ -1,0 +1,202 @@
+<div class="d-flex min-vh-100 bg-light flex-column flex-lg-row position-relative">
+  
+  <button class="btn btn-dark d-lg-none position-absolute top-0 start-0 m-3 z-3 rounded-pill shadow" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu">
+    <i class="bi bi-list fs-4"></i>
+  </button>
+
+  <div class="offcanvas-lg offcanvas-start bg-dark text-white p-3 d-flex flex-column shadow-lg" tabindex="-1" id="sidebarMenu" style="width: 260px; min-width: 260px;">
+    <div class="offcanvas-header d-lg-none border-bottom border-secondary mb-3">
+      <h5 class="offcanvas-title text-warning fw-bold m-0 d-flex align-items-center">
+        <img src="/img/logo-rueda.png" alt="Logo Rueda Jump" style="height: 30px; width: auto;" class="me-2 bg-white rounded p-1">
+        RUEDA JUMP
+      </h5>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" data-bs-target="#sidebarMenu"></button>
+    </div>
+    <div class="text-center mb-4 mt-3 d-none d-lg-block">
+      <div class="bg-white rounded-circle d-inline-flex justify-content-center align-items-center mb-2 shadow p-2" style="width: 80px; height: 80px; overflow: hidden;">
+        <img src="/img/logo-rueda.png" alt="Logo Rueda Jump" style="width: 100%; height: auto; object-fit: contain;">
+      </div>
+      <h4 class="fw-bolder text-warning mt-2 tracking-wide">RUEDA JUMP</h4>
+      <span class="badge bg-secondary rounded-pill fw-normal">Panel Admin</span>
+    </div>
+    <ul class="nav nav-pills flex-column mb-auto mt-2 gap-2">
+      <li class="nav-item"><a routerLink="/admin/dashboard" routerLinkActive="active" class="nav-link text-white rounded-3 py-2 px-3 transition-all hover-bg-darker"><i class="bi bi-speedometer2 me-2"></i> Dashboard</a></li>
+      <li class="nav-item"><a routerLink="/admin/calendario" routerLinkActive="active" class="nav-link text-white fw-bold rounded-3 py-2 px-3 shadow-sm bg-primary bg-gradient"><i class="bi bi-calendar3-event me-2"></i> Calendario</a></li>
+      <li class="nav-item"><a routerLink="/admin/solicitudes" routerLinkActive="active" class="nav-link text-white rounded-3 py-2 px-3 transition-all hover-bg-darker"><i class="bi bi-bell-fill me-2"></i> Solicitudes Web</a></li>
+      <li class="nav-item"><a routerLink="/admin/inventario" routerLinkActive="active" class="nav-link text-white rounded-3 py-2 px-3 transition-all hover-bg-darker"><i class="bi bi-box-seam me-2"></i> Inventario</a></li>
+      <li class="nav-item"><a routerLink="/admin/clientes" routerLinkActive="active" class="nav-link text-white rounded-3 py-2 px-3 transition-all hover-bg-darker"><i class="bi bi-people me-2"></i> Clientes</a></li>
+    </ul>
+    <hr class="border-secondary opacity-25">
+    <a routerLink="/home" class="nav-link text-danger fw-bold text-center rounded-3 py-2 hover-bg-danger-light transition-all"><i class="bi bi-door-open me-2"></i> Salir del Sistema</a>
+  </div>
+
+  <div class="flex-grow-1 p-3 p-md-5 mt-5 mt-lg-0" style="overflow-y: auto; height: 100vh; padding-bottom: 5rem !important;">
+    
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 border-bottom border-light-subtle pb-3">
+      <div class="mb-3 mb-md-0">
+        <h2 class="fw-bolder m-0 text-dark"><i class="bi bi-calendar-check-fill text-primary me-2"></i>Agenda de Eventos</h2>
+        <p class="text-muted small m-0 mt-1">Planifica y controla el rastreo logístico de tus entregas.</p>
+      </div>
+      <div class="d-flex align-items-center gap-3">
+        <button class="btn btn-sm btn-light border fw-bold text-primary shadow-sm rounded-pill px-4" (click)="irAHoy()"><i class="bi bi-calendar-check me-2"></i>Ir a Hoy</button>
+        <button class="btn btn-sm btn-light text-secondary border shadow-sm rounded-pill px-3" (click)="ngOnInit()" title="Recargar"><i class="bi bi-arrow-clockwise me-1"></i> <span class="d-none d-sm-inline">Actualizar</span></button>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-center mb-4">
+      <div class="d-flex align-items-center bg-white rounded-pill shadow-sm px-3 py-2 border">
+        <button class="btn btn-sm btn-link text-dark text-decoration-none px-2" (click)="cambiarMes(-1)"><i class="bi bi-chevron-left fw-bold"></i></button>
+        <h5 class="text-primary fw-bolder m-0 mx-3 text-uppercase" style="min-width: 150px; text-align: center;">{{nombreMes}} {{anioVisible}}</h5>
+        <button class="btn btn-sm btn-link text-dark text-decoration-none px-2" (click)="cambiarMes(1)"><i class="bi bi-chevron-right fw-bold"></i></button>
+      </div>
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-4 bg-white overflow-hidden mb-5">
+      <div class="card-body p-0">
+        <div class="row g-0 text-center bg-light border-bottom text-muted small fw-bold text-uppercase py-2 tracking-wider">
+          <div class="col">Dom</div><div class="col">Lun</div><div class="col">Mar</div><div class="col">Mié</div><div class="col">Jue</div><div class="col">Vie</div><div class="col">Sáb</div>
+        </div>
+        <div class="row g-0">
+          <div class="col-1 border-end border-bottom border-light-subtle position-relative calendar-day transition-all" 
+               *ngFor="let dObj of diasCalendario" 
+               [ngClass]="{'hover-lift-subtle': dObj.numero !== null, 'bg-white': dObj.numero, 'bg-light opacity-50': !dObj.numero, 'bg-primary-subtle border-primary border-2 shadow-inner': dObj.esHoy}"
+               style="min-height: 120px; flex: 0 0 14.28%; max-width: 14.28%;"
+               [style.cursor]="dObj.numero !== null ? 'pointer' : 'default'"
+               (click)="dObj.numero !== null ? ver(dObj.numero) : null"
+               data-bs-toggle="modal" [attr.data-bs-target]="dObj.numero !== null && dObj.cantidadRentas > 0 ? '#modalDetalleEvento' : null">
+            
+            <div class="p-2 w-100 h-100 d-flex flex-column" *ngIf="dObj.numero !== null">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <span class="fw-bold fs-6 d-inline-flex justify-content-center align-items-center rounded-circle" 
+                      [ngClass]="dObj.esHoy ? 'bg-primary text-white shadow-sm' : 'text-secondary'" 
+                      style="width: 28px; height: 28px;">
+                  {{dObj.numero}}
+                </span>
+              </div>
+              <div *ngIf="dObj.cantidadRentas > 0" class="mt-auto">
+                <div class="rounded-2 px-2 py-1 bg-success-subtle border border-success-subtle text-success shadow-sm mb-1 text-center fw-bold" style="font-size: 0.75rem;">
+                  <i class="bi bi-truck me-1"></i> {{dObj.cantidadRentas}} Entrega(s)
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="modal fade" id="modalDetalleEvento" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable mx-2 mx-md-auto">
+    <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden animate__animated animate__zoomIn animate__faster">
+      
+      <div class="modal-header bg-primary text-white border-0 py-3">
+        <h5 class="fw-bold m-0"><i class="bi bi-calendar-check me-2"></i>Entregas del Día {{diaSeleccionado}}</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body p-4 bg-light">
+        <div *ngIf="detallesDelDia.length === 0" class="text-center py-4 text-muted">
+          <i class="bi bi-calendar-x display-4 d-block mb-3 opacity-50"></i>
+          <h5>Día libre</h5>
+          <p>No tienes entregas programadas para esta fecha.</p>
+        </div>
+
+        <div *ngIf="detallesDelDia.length > 0">
+          <p class="text-muted small mb-4">Tienes <strong>{{detallesDelDia.length}}</strong> rentas programadas para hoy. Controla su logística aquí.</p>
+          
+          <div *ngFor="let renta of detallesDelDia; let i = index" class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden">
+            
+            <div class="card-header bg-dark text-white py-2 px-3 fw-bold d-flex justify-content-between align-items-center">
+              <span><i class="bi bi-clock me-2 text-warning"></i>Entrega #{{ i + 1 }} - {{ renta.hora }}</span>
+              <span class="badge" [ngClass]="renta.estadoPago === 'Pagado' ? 'bg-success' : 'bg-warning text-dark'">
+                Pago: {{ renta.estadoPago || 'Pendiente' }}
+              </span>
+            </div>
+            
+            <div class="card-body p-4">
+              <div class="row g-4">
+                <div class="col-md-6 border-end-md">
+                  <h6 class="text-uppercase text-muted fw-bold small tracking-wider mb-3">Datos del Cliente</h6>
+                  <div class="d-flex align-items-center mb-3">
+                    <div class="bg-primary-subtle text-primary rounded-circle d-flex justify-content-center align-items-center fw-bold me-3 shadow-sm" style="width: 45px; height: 45px; font-size: 1.2rem;">
+                      {{ renta.nombreCliente?.charAt(0) | uppercase }}
+                    </div>
+                    <div>
+                      <h5 class="fw-bold text-dark m-0">{{ renta.nombreCliente }}</h5>
+                      <span class="text-muted small"><i class="bi bi-whatsapp text-success me-1"></i>{{ renta.telefono }}</span>
+                    </div>
+                  </div>
+                  <div class="p-3 bg-light rounded-3 border">
+                    <p class="m-0 small text-dark fw-bold mb-1"><i class="bi bi-geo-alt-fill text-danger me-2"></i>Lugar de Entrega:</p>
+                    <p class="m-0 small text-muted ps-4">{{ renta.direccionCompleta }}</p>
+                  </div>
+                </div>
+
+                <div class="col-md-6 d-flex flex-column">
+                  <h6 class="text-uppercase text-muted fw-bold small tracking-wider mb-3">Logística del Equipo</h6>
+                  <h5 class="fw-bold text-primary mb-3"><i class="bi bi-box-seam-fill me-2"></i>{{ renta.equipo }}</h5>
+                  
+                  <div class="d-flex gap-2 mb-3">
+                    <span class="badge bg-light text-dark border py-2 px-3"><i class="bi bi-arrows-fullscreen text-info me-1"></i>{{ renta.medida }}</span>
+                    <span class="badge bg-light text-dark border py-2 px-3"><i class="bi bi-lightning-fill text-warning me-1"></i>{{ renta.voltaje }}</span>
+                  </div>
+
+                  <div class="d-flex justify-content-between align-items-center bg-success-subtle p-3 rounded-3 mt-auto mb-3">
+                    <span class="fw-bold text-success small text-uppercase tracking-wider">Total a Cobrar</span>
+                    <h4 class="fw-bolder text-success m-0">${{ renta.precioTotal | number:'1.2-2' }}</h4>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-footer bg-white border-top p-3 p-md-4">
+               <div class="d-flex justify-content-between align-items-center mb-3">
+                 <h6 class="small fw-bold text-uppercase text-muted m-0"><i class="bi bi-geo-alt-fill me-1 text-danger"></i> Control de Rastreo:</h6>
+                 <span class="badge bg-primary rounded-pill px-3">{{renta.estado}}</span>
+               </div>
+               
+               <div class="d-flex flex-wrap flex-md-nowrap gap-2 mb-2">
+                 <button class="btn btn-sm fw-bold border rounded-pill flex-grow-1" 
+                         [ngClass]="renta.estado === 'Preparando' ? 'btn-warning shadow-sm' : 'btn-light text-secondary'"
+                         (click)="actualizarLogistica(renta, 'Preparando')"><i class="bi bi-box-seam me-1"></i> Preparando</button>
+                         
+                 <button class="btn btn-sm fw-bold border rounded-pill flex-grow-1" 
+                         [ngClass]="renta.estado === 'En Camino' ? 'btn-primary shadow-sm text-white' : 'btn-light text-secondary'"
+                         (click)="actualizarLogistica(renta, 'En Camino')"><i class="bi bi-truck me-1"></i> En Camino</button>
+                         
+                 <button class="btn btn-sm fw-bold border rounded-pill flex-grow-1" 
+                         [ngClass]="renta.estado === 'Instalado' ? 'btn-success shadow-sm' : 'btn-light text-secondary'"
+                         (click)="actualizarLogistica(renta, 'Instalado')"><i class="bi bi-balloon-fill me-1"></i> Instalado</button>
+                         
+                 <button class="btn btn-sm fw-bold border rounded-pill flex-grow-1" 
+                         [ngClass]="renta.estado === 'Recolectado' ? 'btn-dark shadow-sm text-white' : 'btn-light text-secondary'"
+                         (click)="actualizarLogistica(renta, 'Recolectado')"><i class="bi bi-check-all me-1"></i> Finalizado</button>
+               </div>
+               <div class="text-center small text-muted fst-italic mt-3"><i class="bi bi-whatsapp text-success me-1"></i> Cada clic enviará un WhatsApp al cliente y actualizará su rastreo en vivo.</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer border-0 bg-white p-3">
+        <button class="btn btn-light border fw-bold px-5 rounded-pill w-100 text-secondary" data-bs-dismiss="modal">Cerrar Detalles</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .calendar-day:hover { background-color: #f8f9fa !important; }
+  .tracking-wide { letter-spacing: 0.05em; }
+  .tracking-wider { letter-spacing: 0.1em; }
+  .hover-bg-darker:hover { background-color: rgba(0,0,0,0.2); }
+  .hover-bg-danger-light:hover { background-color: #f8d7da; color: #dc3545 !important; }
+  .hover-lift { transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; }
+  .hover-lift:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important; z-index: 10;}
+  .hover-lift-subtle { transition: transform 0.2s ease-in-out; }
+  .hover-lift-subtle:hover { transform: translateY(-2px); z-index: 10; border-radius: 0.5rem; box-shadow: 0 .125rem .25rem rgba(0,0,0,.075) !important; border-color: transparent !important; }
+  .border-end-md { border-right: 0; }
+  @media (min-width: 768px) { .border-end-md { border-right: 1px solid #dee2e6 !important; } }
+</style>

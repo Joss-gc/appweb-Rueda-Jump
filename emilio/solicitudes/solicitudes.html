@@ -1,0 +1,277 @@
+<div class="d-flex min-vh-100 bg-light flex-column flex-lg-row position-relative">
+  
+  <button class="btn btn-dark d-lg-none position-absolute top-0 start-0 m-3 z-3 rounded-pill shadow" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu">
+    <i class="bi bi-list fs-4"></i>
+  </button>
+
+  <div class="offcanvas-lg offcanvas-start bg-dark text-white p-3 d-flex flex-column shadow-lg" tabindex="-1" id="sidebarMenu" style="width: 260px; min-width: 260px;">
+    <div class="offcanvas-header d-lg-none border-bottom border-secondary mb-3">
+      <h5 class="offcanvas-title text-warning fw-bold m-0 d-flex align-items-center">
+        <img src="/img/logo-rueda.png" alt="Logo Rueda Jump" style="height: 30px; width: auto;" class="me-2 bg-white rounded p-1">
+        RUEDA JUMP
+      </h5>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" data-bs-target="#sidebarMenu"></button>
+    </div>
+    <div class="text-center mb-4 mt-3 d-none d-lg-block">
+      <div class="bg-white rounded-circle d-inline-flex justify-content-center align-items-center mb-2 shadow p-2" style="width: 80px; height: 80px; overflow: hidden;">
+        <img src="/img/logo-rueda.png" alt="Logo Rueda Jump" style="width: 100%; height: auto; object-fit: contain;">
+      </div>
+      <h4 class="fw-bolder text-warning mt-2 tracking-wide">RUEDA JUMP</h4>
+      <span class="badge bg-secondary rounded-pill fw-normal">Panel Admin</span>
+    </div>
+    <ul class="nav nav-pills flex-column mb-auto mt-2 gap-2">
+      <li class="nav-item"><a routerLink="/admin/dashboard" routerLinkActive="active" class="nav-link text-white rounded-3 py-2 px-3 transition-all hover-bg-darker"><i class="bi bi-speedometer2 me-2"></i> Dashboard</a></li>
+      <li class="nav-item"><a routerLink="/admin/calendario" routerLinkActive="active" class="nav-link text-white rounded-3 py-2 px-3 transition-all hover-bg-darker"><i class="bi bi-calendar3-event me-2"></i> Calendario</a></li>
+      <li class="nav-item">
+        <a routerLink="/admin/solicitudes" routerLinkActive="active" class="nav-link text-white fw-bold rounded-3 py-2 px-3 shadow-sm bg-primary bg-gradient">
+          <i class="bi bi-bell-fill me-2"></i> Solicitudes Web
+        </a>
+      </li>
+      <li class="nav-item"><a routerLink="/admin/inventario" routerLinkActive="active" class="nav-link text-white rounded-3 py-2 px-3 transition-all hover-bg-darker"><i class="bi bi-box-seam me-2"></i> Inventario</a></li>
+      <li class="nav-item"><a routerLink="/admin/clientes" routerLinkActive="active" class="nav-link text-white rounded-3 py-2 px-3 transition-all hover-bg-darker"><i class="bi bi-people me-2"></i> Clientes</a></li>
+    </ul>
+    <hr class="border-secondary opacity-25">
+    <a routerLink="/home" class="nav-link text-danger fw-bold text-center rounded-3 py-2 hover-bg-danger-light transition-all"><i class="bi bi-door-open me-2"></i> Salir del Sistema</a>
+  </div>
+
+  <div class="flex-grow-1 p-3 p-md-5 mt-5 mt-lg-0" style="overflow-y: auto; height: 100vh; padding-bottom: 5rem !important;">
+    
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 pb-3 border-bottom border-light-subtle">
+      <div class="mb-3 mb-md-0 d-flex justify-content-between align-items-center w-100">
+        <div>
+          <h2 class="fw-bolder m-0 text-dark"><i class="bi bi-inbox-fill me-2 text-primary"></i>Bandeja de Solicitudes</h2>
+          <p class="text-muted small m-0 mt-1">Revisa peticiones y comprueba pagos usando el nuevo formato.</p>
+        </div>
+        <button class="btn btn-sm btn-light text-secondary border shadow-sm rounded-pill px-3" (click)="cargarSolicitudes()" title="Recargar"><i class="bi bi-arrow-clockwise me-1"></i> <span class="d-none d-sm-inline">Actualizar</span></button>
+      </div>
+      
+      <div class="input-group bg-white rounded-pill shadow-sm border mt-3 mt-md-0" style="max-width: 350px;">
+        <span class="input-group-text bg-transparent border-0 pe-1 ms-2"><i class="bi bi-search text-primary"></i></span>
+        <input type="text" class="form-control border-0 bg-transparent shadow-none" placeholder="Buscar cliente..." [(ngModel)]="terminoBusqueda" (input)="filtrarLista()">
+      </div>
+    </div>
+
+    <ul class="nav nav-pills mb-4 gap-2 border-bottom border-light-subtle pb-3 overflow-auto flex-nowrap hide-scrollbar">
+      <li class="nav-item">
+        <button class="nav-link rounded-pill fw-bold white-space-nowrap" 
+                [ngClass]="pestanaActiva === 'nuevas' ? 'active bg-warning text-dark shadow-sm' : 'text-secondary hover-bg-light border bg-white'"
+                (click)="cambiarPestana('nuevas')">
+          <i class="bi bi-asterisk me-1"></i> Por Aprobar ({{solicitudesPendientes.length}})
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link rounded-pill fw-bold white-space-nowrap" 
+                [ngClass]="pestanaActiva === 'pagos' ? 'active bg-info text-dark shadow-sm' : 'text-secondary hover-bg-light border bg-white'"
+                (click)="cambiarPestana('pagos')">
+          <i class="bi bi-cash-coin me-1"></i> Validación Pagos ({{pagosEnRevision.length}})
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link rounded-pill fw-bold white-space-nowrap" 
+                [ngClass]="pestanaActiva === 'historial' ? 'active bg-dark shadow-sm' : 'text-secondary hover-bg-light border bg-white'"
+                (click)="cambiarPestana('historial')">
+          <i class="bi bi-journal-text me-1"></i> Historial
+        </button>
+      </li>
+    </ul>
+
+    <div *ngIf="cargando" class="text-center py-5">
+      <div class="spinner-border text-primary" role="status"></div>
+      <p class="text-muted mt-2 small">Sincronizando reservas...</p>
+    </div>
+
+    <div class="row g-4 mb-5" *ngIf="!cargando">
+      
+      <div *ngIf="reservasMostradas.length === 0" class="col-12 text-center py-5 bg-white rounded-4 shadow-sm border-0 w-100">
+        <i class="bi bi-inbox text-muted display-4 mb-3 d-block opacity-50"></i>
+        <h5 class="text-muted">No hay solicitudes en esta sección.</h5>
+      </div>
+
+      <div class="col-12 col-md-6 col-xl-4" *ngFor="let s of reservasMostradas">
+        <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden hover-lift bg-white">
+          <div class="card-header border-0 py-2 px-3 d-flex justify-content-between align-items-center"
+               [ngClass]="{'bg-warning': s.estado === 'Pendiente', 'bg-success': s.estado === 'Aprobado' || s.estado === 'Confirmado', 'bg-danger': s.estado === 'Rechazado' || s.estado === 'Cancelado'}">
+            <span class="fw-bold small" [ngClass]="s.estado === 'Pendiente' ? 'text-dark' : 'text-white'">
+              <i class="bi bi-calendar-event me-1"></i> {{s.fechaEvento}}
+            </span>
+            <span class="badge bg-white shadow-sm" [ngClass]="{'text-warning': s.estado === 'Pendiente', 'text-success': s.estado === 'Aprobado' || s.estado === 'Confirmado', 'text-danger': s.estado === 'Rechazado' || s.estado === 'Cancelado'}">
+              {{s.estado | uppercase}}
+            </span>
+          </div>
+          
+          <div class="card-body p-4 d-flex flex-column">
+            
+            <div class="d-flex align-items-center gap-3 mb-3 pb-3 border-bottom border-light-subtle">
+              <div class="bg-primary-subtle text-primary rounded-circle d-flex justify-content-center align-items-center fw-bold shadow-sm flex-shrink-0" style="width: 50px; height: 50px; font-size: 1.2rem;">
+                {{ s.nombreCliente?.charAt(0) | uppercase }}
+              </div>
+              <div class="overflow-hidden">
+                <h5 class="fw-bold text-dark mb-0 text-truncate">{{ s.nombreCliente }}</h5>
+                <span class="badge bg-success-subtle text-success mt-1"><i class="bi bi-whatsapp me-1"></i>{{s.telefono}}</span>
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <div class="fw-bold text-primary fs-5 mb-1"><i class="bi bi-box-seam-fill me-2"></i>{{s.equipo}}</div>
+              <div class="small text-secondary fw-medium mb-1"><i class="bi bi-clock me-2 text-info"></i>{{s.hora}}</div>
+              
+              <div class="small text-danger fw-bold text-truncate" title="{{ s.direccion || 'Sin dirección registrada' }}, Col. {{s.colonia || ''}}">
+                <i class="bi bi-geo-alt-fill me-2"></i>{{ s.direccion || 'Sin dirección registrada' }}<span *ngIf="s.colonia">, Col. {{s.colonia}}</span>
+              </div>
+            </div>
+
+            <div class="mt-auto">
+              
+              <div *ngIf="pestanaActiva === 'nuevas'">
+                <div class="d-flex justify-content-between align-items-center bg-light p-2 rounded-3 mb-3 border">
+                  <span class="small text-muted fw-bold text-uppercase">Total</span>
+                  <span class="fw-bold text-success fs-5">${{s.precio | number:'1.2-2'}}</span>
+                </div>
+                <div class="d-flex gap-2">
+                  <button class="btn btn-outline-danger rounded-pill fw-bold flex-grow-1" (click)="prepararAccion(s, 'Rechazar')" data-bs-toggle="modal" data-bs-target="#modalAccion"><i class="bi bi-x-lg me-1"></i> Rechazar</button>
+                  <button class="btn btn-success rounded-pill fw-bold shadow-sm flex-grow-1" (click)="prepararAccion(s, 'Aprobar')" data-bs-toggle="modal" data-bs-target="#modalAccion"><i class="bi bi-check-lg me-1"></i> Aprobar</button>
+                </div>
+              </div>
+
+              <div *ngIf="pestanaActiva === 'pagos'">
+                <div class="p-3 rounded-3 text-center mb-3" [ngClass]="s.comprobanteUrl ? 'bg-info-subtle' : 'bg-warning-subtle'">
+                  <div *ngIf="!s.comprobanteUrl">
+                    <i class="bi bi-hourglass-split text-warning fs-4 d-block mb-1"></i>
+                    <span class="fw-bold text-dark small d-block mb-2">Falta Recibo / Anticipo</span>
+                    <input type="file" #filePagoAdmin2 style="display: none" (change)="onPagoAdminSelected($event, s._id)" accept="image/*,application/pdf">
+                    <button class="btn btn-sm btn-primary rounded-pill fw-bold shadow-sm w-100" (click)="filePagoAdmin2.click()">
+                      <i class="bi bi-cloud-upload me-1"></i> Lo recibí (Subir)
+                    </button>
+                  </div>
+                  <div *ngIf="s.comprobanteUrl">
+                    <i class="bi bi-file-earmark-check-fill text-info fs-4 d-block mb-1"></i>
+                    <span class="fw-bold text-dark small d-block mb-2">Archivo Listo para Revisar</span>
+                    <button class="btn btn-sm btn-info text-white rounded-pill fw-bold shadow-sm w-100" (click)="verComprobante(s)" data-bs-toggle="modal" data-bs-target="#modalVerPago">
+                      <i class="bi bi-eye-fill me-1"></i> Abrir y Validar
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="pestanaActiva === 'historial'" class="d-flex justify-content-between align-items-center pt-3 border-top">
+                 <span class="badge rounded-pill px-3 py-2 border" [ngClass]="s.estadoPago === 'Pagado' ? 'bg-success-subtle text-success border-success' : 'bg-light text-secondary border-secondary'">
+                   <i class="bi" [ngClass]="s.estadoPago === 'Pagado' ? 'bi-check-all' : 'bi-dash'"></i> Pago: {{s.estadoPago || '---'}}
+                 </span>
+                 <button class="btn btn-sm btn-outline-secondary rounded-pill" (click)="verComprobante(s)" data-bs-toggle="modal" data-bs-target="#modalDetallesSolo"><i class="bi bi-list-ul me-1"></i> Ficha</button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="modal fade" id="modalAccion" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+      <div class="modal-header border-0 py-3 text-white" [ngClass]="solicitudSeleccionada?.estadoTemporal === 'Rechazar' ? 'bg-danger' : 'bg-success'">
+        <h5 class="fw-bold m-0"><i class="bi bi-whatsapp me-2"></i>Enviar Notificación</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4 bg-light">
+        <div class="form-group">
+          <label class="fw-bold text-dark small mb-2">Mensaje para {{solicitudSeleccionada?.nombreCliente}}:</label>
+          <textarea class="form-control border-0 shadow-sm rounded-3" rows="5" [(ngModel)]="mensajeWA"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer border-0 bg-white p-3 d-flex gap-2">
+        <button class="btn btn-light fw-bold rounded-pill border flex-grow-1" data-bs-dismiss="modal">Cancelar</button>
+        <button class="btn btn-danger fw-bold rounded-pill shadow-sm flex-grow-1" *ngIf="solicitudSeleccionada?.estadoTemporal === 'Rechazar'" (click)="confirmarAccion('Rechazado')" data-bs-dismiss="modal">Rechazar Definitivo</button>
+        <button class="btn btn-success fw-bold rounded-pill shadow-sm flex-grow-1" *ngIf="solicitudSeleccionada?.estadoTemporal === 'Aprobar'" (click)="confirmarAccion('Aprobado')" data-bs-dismiss="modal">Aprobar Renta</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalVerPago" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+      <div class="modal-header bg-dark border-0 py-3 text-white">
+        <h5 class="fw-bold m-0"><i class="bi bi-receipt me-2 text-info"></i>Comprobante de {{solicitudSeleccionada?.nombreCliente}}</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-0 bg-light text-center position-relative">
+        <img *ngIf="solicitudSeleccionada?.comprobanteUrl && esImagen(solicitudSeleccionada?.comprobanteUrl)" 
+             [src]="'http://127.0.0.1:3000' + solicitudSeleccionada?.comprobanteUrl" 
+             class="img-fluid" style="max-height: 70vh;">
+        <iframe *ngIf="solicitudSeleccionada?.comprobanteUrl && !esImagen(solicitudSeleccionada?.comprobanteUrl)" 
+                [src]="'http://127.0.0.1:3000' + solicitudSeleccionada?.comprobanteUrl" 
+                width="100%" height="500px" style="border: none;"></iframe>
+        <div *ngIf="!solicitudSeleccionada?.comprobanteUrl" class="p-5 text-muted fw-bold">
+          <i class="bi bi-exclamation-triangle-fill fs-1 d-block mb-3 text-warning"></i>
+          El archivo se está procesando o hubo un error.
+        </div>
+      </div>
+      <div class="modal-footer border-0 bg-white p-3 d-flex justify-content-between align-items-center">
+        <span class="fw-bold text-success fs-5">Monto esperado: ${{solicitudSeleccionada?.precio | number:'1.2-2'}}</span>
+        <div>
+          <button class="btn btn-light fw-bold rounded-pill border px-4 me-2" data-bs-dismiss="modal">Cerrar</button>
+          <button class="btn btn-success fw-bold rounded-pill shadow-sm px-4" (click)="aprobarPago()" [disabled]="!solicitudSeleccionada?.comprobanteUrl">
+            <i class="bi bi-check-circle-fill me-2"></i> Validar Pago
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalDetallesSolo" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+      <div class="modal-header bg-dark text-white border-0 py-3">
+        <h5 class="modal-title fw-bold m-0"><i class="bi bi-info-circle text-info me-2"></i>Ficha Técnica</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4 bg-light">
+        <ul class="list-group list-group-flush rounded-3 shadow-sm border">
+           <li class="list-group-item"><strong>Cliente:</strong> {{solicitudSeleccionada?.nombreCliente}}</li>
+           <li class="list-group-item"><strong>Teléfono:</strong> {{solicitudSeleccionada?.telefono}}</li>
+           <li class="list-group-item"><strong>Dirección:</strong> {{solicitudSeleccionada?.direccion}}<span *ngIf="solicitudSeleccionada?.colonia">, {{solicitudSeleccionada?.colonia}}</span></li>
+           <li class="list-group-item"><strong>Equipo:</strong> <span class="text-primary fw-bold">{{solicitudSeleccionada?.equipo}}</span></li>
+           <li class="list-group-item"><strong>Fecha/Hora:</strong> {{solicitudSeleccionada?.fechaEvento}} | {{solicitudSeleccionada?.hora}}</li>
+           <li class="list-group-item"><strong>Cobro:</strong> <span class="text-success fw-bold">${{solicitudSeleccionada?.precio | number:'1.2-2'}}</span></li>
+        </ul>
+      </div>
+      <div class="modal-footer border-0 bg-white p-3">
+        <button class="btn btn-light border fw-bold w-100 rounded-pill text-secondary" data-bs-dismiss="modal">Cerrar Ficha</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalExitoAdmin" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden animate__animated animate__zoomIn">
+      <div class="modal-body text-center p-5">
+        <div class="bg-success-subtle text-success rounded-circle d-flex align-items-center justify-content-center mx-auto mb-4" style="width: 70px; height: 70px;">
+          <i class="bi bi-check-circle-fill fs-1"></i>
+        </div>
+        <h4 class="fw-bold text-dark">¡Listo!</h4>
+        <p class="text-secondary small mb-4">El pago ha sido registrado y aprobado.</p>
+        <button type="button" class="btn btn-success w-100 rounded-pill fw-bold" data-bs-dismiss="modal" (click)="limpiarPantallaYRefrescar()">
+          Aceptar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .white-space-nowrap { white-space: nowrap; }
+  .hide-scrollbar::-webkit-scrollbar { display: none; }
+  .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  .tracking-wide { letter-spacing: 0.05em; }
+  .tracking-wider { letter-spacing: 0.1em; }
+  .hover-bg-darker:hover { background-color: rgba(0,0,0,0.2); }
+  .hover-bg-danger-light:hover { background-color: #f8d7da; color: #dc3545 !important; }
+  .hover-lift { transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; }
+  .hover-lift:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important; z-index: 10;}
+</style>
