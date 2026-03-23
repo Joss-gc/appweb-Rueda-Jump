@@ -1,0 +1,219 @@
+<main class="min-vh-100 bg-light d-flex align-items-center justify-content-center p-3 position-relative">
+  
+  <div class="w-100 animate__animated animate__fadeIn" [ngStyle]="{'max-width': vistaActual === 'registro' ? '650px' : '400px'}">
+    
+    <div class="text-center mb-4">
+      <div class="bg-white rounded-circle d-inline-flex justify-content-center align-items-center shadow-sm p-2 mb-2" style="width: 80px; height: 80px;">
+        <i class="bi bi-balloon text-primary" style="font-size: 3rem;"></i>
+      </div>
+      <h3 class="fw-bolder text-primary tracking-wide m-0">RUEDA JUMP</h3>
+    </div>
+
+    <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+      <div class="card-body p-4 p-md-5">
+
+        <div *ngIf="vistaActual === 'login'" class="animate__animated animate__fadeIn">
+          <h4 class="fw-bold text-dark mb-1">¡Hola! Ingresa a tu cuenta</h4>
+          <p class="text-muted small mb-4">Para rentar equipos y gestionar tus reservas.</p>
+
+          <form (ngSubmit)="iniciarSesion()">
+            <div class="mb-3">
+              <label class="fw-bold small text-secondary mb-1">E-mail</label>
+              <input type="email" class="form-control bg-light border-0 py-2" placeholder="ejemplo@correo.com" 
+                     [(ngModel)]="loginData.correo" name="logCorreo" [ngClass]="{'is-invalid': intentoLogin && !correoLogValido}">
+              <div class="invalid-feedback small">Ingresa un correo válido.</div>
+            </div>
+            <div class="mb-4">
+              <label class="fw-bold small text-secondary mb-1">Contraseña</label>
+              <input type="password" class="form-control bg-light border-0 py-2" placeholder="••••••••" 
+                     [(ngModel)]="loginData.password" name="logPass" [ngClass]="{'is-invalid': intentoLogin && !passLogValida}">
+              <div class="invalid-feedback small">Revisa tu contraseña.</div>
+            </div>
+            <button type="submit" class="btn btn-primary w-100 fw-bold rounded-pill py-3 shadow-sm mb-3">Continuar</button>
+            <div class="text-center mb-4">
+              <a href="javascript:void(0)" class="text-decoration-none small text-primary fw-medium d-block" (click)="cambiarVista('recuperar')">¿Olvidaste tu contraseña?</a>
+            </div>
+
+            <div class="position-relative text-center my-4">
+              <hr class="opacity-25">
+              <span class="bg-white px-2 position-absolute top-50 start-50 translate-middle text-muted small fw-bold">O ingresa con</span>
+            </div>
+
+            <div class="d-grid gap-2">
+              <button type="button" class="btn btn-outline-dark fw-bold rounded-pill py-2 shadow-sm d-flex justify-content-center align-items-center" (click)="loginConGoogle()">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google Logo" width="20" class="me-2">
+                Continuar con Google
+              </button>
+            </div>
+          </form>
+
+          <div class="text-center mt-4">
+            <p class="text-muted small mb-2">¿Aún no tienes cuenta?</p>
+            <button class="btn btn-outline-primary w-100 fw-bold rounded-pill py-2" (click)="cambiarVista('registro')">Crear cuenta</button>
+          </div>
+        </div>
+
+        <div *ngIf="vistaActual === 'recuperar'" class="animate__animated animate__fadeIn">
+          <h4 class="fw-bold text-dark mb-1">Restablecer contraseña</h4>
+          <p class="text-muted small mb-4">Elige cómo quieres recibir las instrucciones para recuperar tu cuenta.</p>
+
+          <div class="d-flex bg-light rounded-pill p-1 mb-4 border">
+            <button class="btn w-50 rounded-pill fw-bold" [ngClass]="metodoRecuperacion === 'correo' ? 'btn-primary shadow-sm' : 'btn-light text-muted'" (click)="metodoRecuperacion = 'correo'">
+              <i class="bi bi-envelope me-1"></i> Correo
+            </button>
+            <button class="btn w-50 rounded-pill fw-bold" [ngClass]="metodoRecuperacion === 'whatsapp' ? 'btn-success shadow-sm' : 'btn-light text-muted'" (click)="metodoRecuperacion = 'whatsapp'">
+              <i class="bi bi-whatsapp me-1"></i> WhatsApp
+            </button>
+          </div>
+
+          <form (ngSubmit)="recuperarPassword()">
+            <div class="mb-4 animate__animated animate__fadeIn" *ngIf="metodoRecuperacion === 'correo'">
+              <label class="fw-bold small text-secondary mb-1">E-mail de tu cuenta</label>
+              <input type="email" class="form-control bg-light border-0 py-2" placeholder="ejemplo@correo.com" 
+                     [(ngModel)]="recuperarCorreo" name="recupCorreo" [ngClass]="{'is-invalid': intentoRecuperar && !(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(recuperarCorreo))}">
+              <div class="invalid-feedback small">Ingresa un correo válido.</div>
+            </div>
+
+            <div class="mb-4 animate__animated animate__fadeIn" *ngIf="metodoRecuperacion === 'whatsapp'">
+              <label class="fw-bold small text-secondary mb-1">WhatsApp registrado</label>
+              <div class="input-group">
+                <span class="input-group-text bg-light border-0 text-success"><i class="bi bi-whatsapp"></i></span>
+                <input type="tel" class="form-control bg-light border-0 py-2 border-start-0" placeholder="10 dígitos" maxlength="10" 
+                       (keypress)="soloNumeros($event)" [(ngModel)]="recuperarTelefono" name="recupTel" [ngClass]="{'is-invalid border-start-0': intentoRecuperar && recuperarTelefono.length !== 10}">
+                <div class="invalid-feedback small">El número debe tener 10 dígitos.</div>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-warning w-100 fw-bold rounded-pill py-3 shadow-sm mb-3 text-dark">Enviar Instrucciones</button>
+            
+            <div class="text-center mt-4">
+              <a href="javascript:void(0)" class="text-decoration-none small text-secondary fw-bold" (click)="cambiarVista('login')"><i class="bi bi-arrow-left me-1"></i> Volver al Login</a>
+            </div>
+          </form>
+        </div>
+
+        <div *ngIf="vistaActual === 'registro'" class="animate__animated animate__fadeIn">
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <h4 class="fw-bold text-dark m-0">Crea tu cuenta</h4>
+            <button class="btn btn-sm btn-light rounded-circle text-secondary shadow-sm" (click)="cambiarVista('login')"><i class="bi bi-x-lg"></i></button>
+          </div>
+          <p class="text-muted small mb-4">Todos los campos son obligatorios.</p>
+
+          <form>
+            <h6 class="fw-bold text-primary border-bottom pb-2 mb-3"><i class="bi bi-person-badge me-2"></i>Datos Personales</h6>
+            <div class="row g-2 mb-3">
+              <div class="col-12">
+                <label class="fw-bold small text-secondary mb-1">Nombre Completo</label>
+                <input type="text" class="form-control bg-light border-0 py-2" placeholder="Ej. Juan Pérez" [(ngModel)]="registroData.nombre" name="regNombre" [ngClass]="{'is-invalid': intentoRegistro && !nombreValido}">
+                <div class="invalid-feedback small">Ingresa tu nombre.</div>
+              </div>
+              <div class="col-md-6">
+                <label class="fw-bold small text-secondary mb-1">Correo Electrónico</label>
+                <input type="email" class="form-control bg-light border-0 py-2" placeholder="correo@dominio.com" [(ngModel)]="registroData.correo" name="regCorreo" [ngClass]="{'is-invalid': intentoRegistro && !correoRegValido}">
+                <div class="invalid-feedback small">Debe tener formato: @dominio.com</div>
+              </div>
+              <div class="col-md-6">
+                <label class="fw-bold small text-secondary mb-1">WhatsApp</label>
+                <div class="input-group">
+                  <span class="input-group-text bg-light border-0 text-success" [ngClass]="{'bg-danger-subtle border border-danger': intentoRegistro && !telefonoValido}"><i class="bi bi-whatsapp"></i></span>
+                  <input type="tel" class="form-control bg-light border-0 py-2 border-start-0" placeholder="10 dígitos" maxlength="10" (keypress)="soloNumeros($event)" [(ngModel)]="registroData.telefono" name="regTel" [ngClass]="{'is-invalid': intentoRegistro && !telefonoValido}">
+                  <div class="invalid-feedback small">Debe tener 10 números.</div>
+                </div>
+              </div>
+              <div class="col-md-6 mt-2">
+                <label class="fw-bold small text-secondary mb-1">Contraseña</label>
+                <input type="password" class="form-control bg-light border-0 py-2" placeholder="Mín. 6 caracteres" [(ngModel)]="registroData.password" name="regPass" [ngClass]="{'is-invalid': intentoRegistro && !passValida}">
+                <div class="invalid-feedback small">Mínimo 6 caracteres.</div>
+              </div>
+              <div class="col-md-6 mt-2">
+                <label class="fw-bold small text-secondary mb-1">Repetir Contraseña</label>
+                <input type="password" class="form-control bg-light border-0 py-2" placeholder="Confirma la contraseña" [(ngModel)]="registroData.confirmarPassword" name="regConfPass" [ngClass]="{'is-invalid': intentoRegistro && !passCoinciden}">
+                <div class="invalid-feedback small">Las contraseñas no coinciden.</div>
+              </div>
+            </div>
+
+            <h6 class="fw-bold text-primary border-bottom pb-2 mb-3 mt-4"><i class="bi bi-geo-alt me-2"></i>Dirección de Entrega</h6>
+            <div class="row g-2 mb-4">
+              <div class="col-md-8">
+                <label class="fw-bold small text-secondary mb-1">Calle y Número</label>
+                <input type="text" class="form-control bg-light border-0 py-2" placeholder="Ej. Calle Hidalgo #123" [(ngModel)]="registroData.calle" name="regCalle" [ngClass]="{'is-invalid': intentoRegistro && !calleValida}">
+              </div>
+              <div class="col-md-4">
+                <label class="fw-bold small text-secondary mb-1">C.P.</label>
+                <input type="text" class="form-control bg-light border-0 py-2" placeholder="42000" maxlength="5" (keypress)="soloNumeros($event)" [(ngModel)]="registroData.cp" name="regCP" [ngClass]="{'is-invalid': intentoRegistro && !cpValido}">
+              </div>
+              <div class="col-md-6">
+                <label class="fw-bold small text-secondary mb-1">Colonia</label>
+                <input type="text" class="form-control bg-light border-0 py-2" placeholder="Ej. Centro" [(ngModel)]="registroData.colonia" name="regColonia" [ngClass]="{'is-invalid': intentoRegistro && !coloniaValida}">
+              </div>
+              <div class="col-md-6">
+                <label class="fw-bold small text-secondary mb-1">Referencias (Opcional)</label>
+                <input type="text" class="form-control bg-light border-0 py-2" placeholder="Fachada azul..." [(ngModel)]="registroData.referencias" name="regRef">
+              </div>
+            </div>
+
+            <button type="button" class="btn btn-success w-100 fw-bold rounded-pill py-3 shadow-sm mb-3" (click)="registrarCliente()">
+              Registrarme
+            </button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+    
+    <div class="text-center mt-3">
+      <a routerLink="/" class="text-muted text-decoration-none small fw-medium"><i class="bi bi-arrow-left me-1"></i> Volver a la tienda</a>
+    </div>
+
+  </div>
+
+  <div class="modal-overlay" *ngIf="mostrarModalError || mostrarModalExito || mostrarModalRecuperar"></div>
+
+  <div class="modal-dialog-centered position-fixed top-50 start-50 translate-middle" style="z-index: 10000; width: 90%; max-width: 350px;" *ngIf="mostrarModalError">
+    <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden animate__animated animate__shakeX bg-white">
+      <div class="modal-header bg-danger text-white border-0 py-3 px-4">
+        <h5 class="modal-title fw-bold m-0 fs-6"><i class="bi bi-exclamation-triangle-fill me-2"></i>¡Atención!</h5>
+      </div>
+      <div class="modal-body text-center p-4">
+        <p class="text-dark mb-0 fw-medium">{{mensajeModal}}</p>
+      </div>
+      <div class="modal-footer border-0 bg-light p-3">
+        <button class="btn btn-danger btn-sm w-100 fw-bold rounded-pill py-2" (click)="cerrarModales()">Entendido</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-dialog-centered position-fixed top-50 start-50 translate-middle" style="z-index: 10000; width: 90%; max-width: 350px;" *ngIf="mostrarModalExito">
+    <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden animate__animated animate__zoomIn bg-white">
+      <div class="modal-body text-center p-4 p-md-5">
+        <i class="bi bi-check-circle-fill text-success mb-3 d-block" style="font-size: 4rem;"></i>
+        <h4 class="text-success fw-bold mb-2">¡Correcto!</h4>
+        <p class="text-muted small mb-4">{{mensajeModal}}</p>
+        <button class="btn btn-success btn-sm w-100 fw-bold rounded-pill py-2 shadow-sm" (click)="cerrarModales()">Aceptar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-dialog-centered position-fixed top-50 start-50 translate-middle" style="z-index: 10000; width: 90%; max-width: 350px;" *ngIf="mostrarModalRecuperar">
+    <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden animate__animated animate__zoomIn bg-white">
+      <div class="modal-body text-center p-4 p-md-5">
+        <i class="bi bi-envelope-check-fill text-warning mb-3 d-block" style="font-size: 4rem;" *ngIf="metodoRecuperacion === 'correo'"></i>
+        <i class="bi bi-whatsapp text-success mb-3 d-block" style="font-size: 4rem;" *ngIf="metodoRecuperacion === 'whatsapp'"></i>
+        
+        <h4 class="fw-bold mb-2" [ngClass]="metodoRecuperacion === 'whatsapp' ? 'text-success' : 'text-warning'">Instrucciones Enviadas</h4>
+        
+        <p class="text-muted small mb-4" *ngIf="metodoRecuperacion === 'correo'">
+          Revisa tu bandeja de entrada o la carpeta de spam para restablecer tu contraseña.
+        </p>
+        <p class="text-muted small mb-4" *ngIf="metodoRecuperacion === 'whatsapp'">
+          Te hemos enviado un mensaje de WhatsApp con un enlace seguro para crear una nueva contraseña.
+        </p>
+        
+        <button class="btn btn-sm w-100 fw-bold rounded-pill py-2 shadow-sm" [ngClass]="metodoRecuperacion === 'whatsapp' ? 'btn-success' : 'btn-warning text-dark'" (click)="cerrarModales(); cambiarVista('login')">
+          Volver al Login
+        </button>
+      </div>
+    </div>
+  </div>
+
+</main>
