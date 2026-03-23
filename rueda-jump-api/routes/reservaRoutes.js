@@ -1,95 +1,119 @@
 const express = require('express');
 const router = express.Router();
-const Reserva = require('../models/reserva'); // Verifica que este nombre coincida con tu modelo real
 const multer = require('multer');
 const path = require('path');
-const fs = require('fs');
+const Reserva = require('../models/reserva');
+const Equipo = require('../models/equipo'); // Importamos el modelo de Equipo
 
-// 🚩 CONFIGURACIÓN MULTER PARA COMPROBANTES
+// Configuración de Multer para los comprobantes
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const pathDir = path.join(__dirname, '../public/comprobantes');
-    if (!fs.existsSync(pathDir)) {
-      fs.mkdirSync(pathDir, { recursive: true });
-    }
-    cb(null, pathDir);
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, '../public/comprobantes'));
   },
-  filename: (req, file, cb) => {
-    // Generamos un nombre único para que no se sobreescriban fotos
+  filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, 'pago_' + uniqueSuffix + path.extname(file.originalname));
+    cb(null, 'pago-' + uniqueSuffix + path.extname(file.originalname));
   }
 });
-const upload = multer({ storage });
+const upload = multer({ storage: storage });
 
 // Obtener todas las reservas
 router.get('/', async (req, res) => {
   try {
-    const reservas = await Reserva.find().sort({ fechaCreacion: -1 });
+    const reservas = await Reserva.find().sort({ createdAt: -1 });
     res.json(reservas);
-  } catch (err) { 
-    res.status(500).json({ error: err.message }); 
+  } catch (error) {
+    res.status(500).json({ message: 'Error al obtener reservas', error });
   }
 });
 
-// Obtener por teléfono del cliente
-router.get('/cliente/:telefono', async (req, res) => {
-  try {
-    const { telefono } = req.params;
-    const reservas = await Reserva.find({ telefono: telefono }).sort({ fechaCreacion: -1 });
-    res.json(reservas);
-  } catch (err) { 
-    res.status(500).json({ error: err.message }); 
-  }
-});
-
-// Crear nueva reserva
+// =================================================================
+// 🚩 MAGIA 1: RESTAR STOCK EN CUANTO EL CLIENTE PIDE EL EQUIPO
+// =================================================================
 router.post('/', async (req, res) => {
   try {
     const nuevaReserva = new Reserva(req.body);
     await nuevaReserva.save();
-    return res.status(201).send({ ok: true, mensaje: '¡Listo!', reserva: nuevaReserva });
-  } catch (err) {
-    return res.status(500).send({ ok: false, error: err.message });
+
+    // Le restamos 1 al stock automáticamente para "apartarlo" y que nadie más lo pida
+    await Equipo.findOneAndUpdate(
+      { nombre: nuevaReserva.equipo },
+      { $inc: { stock: -1 } } // Resta 1
+    );
+
+    res.status(201).json(nuevaReserva);
+  } catch (error) {
+    res.status(500).json({ message: 'Error al crear reserva', error });
   }
 });
 
-// 🚩 ACTUALIZAR CUALQUIER DATO (Esto usa el Admin para poner "Pagado" o "Confirmado")
+// =================================================================
+// 🚩 MAGIA 2: DEVOLVER EL STOCK SI TÚ RECHAZAS LA RENTA
+// =================================================================
 router.put('/:id', async (req, res) => {
   try {
-    const reservaActualizada = await Reserva.findByIdAndUpdate(
-      req.params.id, 
-      { $set: req.body }, // 🚩 ESTO ES VITAL
-      { new: true }
-    );
+    const { id } = req.params;
+    const nuevosDatos = req.body;
+
+    const reservaAnterior = await Reserva.findById(id);
+    if (!reservaAnterior) return res.status(404).json({ message: 'Reserva no encontrada' });
+
+    const reservaActualizada = await Reserva.findByIdAndUpdate(id, nuevosDatos, { new: true });
+
+    // Si tú como Admin decides "Rechazar" la renta, el sistema regresa el inflable a la vitrina sumándole 1
+    if (nuevosDatos.estado === 'Rechazado' && reservaAnterior.estado !== 'Rechazado') {
+      await Equipo.findOneAndUpdate(
+        { nombre: reservaActualizada.equipo }, 
+        { $inc: { stock: 1 } } // Suma 1 de regreso
+      );
+    }
+
     res.json(reservaActualizada);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
+  } catch (error) {
+    console.error("Error al actualizar estado y stock:", error);
+    res.status(500).json({ message: 'Error al actualizar reserva', error });
   }
 });
 
-// 🚩 LA RUTA QUE FALTABA: SUBIR COMPROBANTE DE PAGO
-// Nota que aquí sí usamos 'upload.single("comprobante")' y la ruta es '/:id/pago'
+// Ruta exclusiva para subir el comprobante de pago
 router.put('/:id/pago', upload.single('comprobante'), async (req, res) => {
   try {
+    const { id } = req.params;
+    
     if (!req.file) {
-      return res.status(400).json({ message: "No se subió ningún archivo." });
+      return res.status(400).json({ message: 'No se subió ningún archivo' });
     }
 
-    // Guardamos la URL de la foto y pasamos a En Revisión automáticamente
+    const comprobanteUrl = '/comprobantes/' + req.file.filename;
+
     const reservaActualizada = await Reserva.findByIdAndUpdate(
-      req.params.id, 
+      id, 
       { 
-        $set: { 
-          comprobanteUrl: `/comprobantes/${req.file.filename}`,
-          estadoPago: 'En Revisión' 
-        } 
+        comprobanteUrl: comprobanteUrl,
+        estadoPago: 'En Revisión' 
       }, 
       { new: true }
     );
+
     res.json(reservaActualizada);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
+  } catch (error) {
+    console.error("Error al subir comprobante:", error);
+    res.status(500).json({ message: 'Error al subir comprobante', error });
+  }
+});
+
+// Ruta para que el admin confirme que ya revisó y aceptó el pago
+router.put('/:id/confirmar-pago', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const reservaActualizada = await Reserva.findByIdAndUpdate(
+      id, 
+      { estadoPago: 'Pagado' }, 
+      { new: true }
+    );
+    res.json(reservaActualizada);
+  } catch (error) {
+    res.status(500).json({ message: 'Error al confirmar pago', error });
   }
 });
 
