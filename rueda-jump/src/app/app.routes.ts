@@ -9,6 +9,11 @@ import { Dashboard } from './admin/dashboard/dashboard';
 import { Calendario } from './admin/calendario/calendario';
 import { Inventario } from './admin/inventario/inventario';
 
+// 👇 IMPORTA TUS NUEVOS COMPONENTES
+import { Ingresos } from './admin/ingresos/ingresos';
+import { Rentas } from './admin/rentas/rentas';
+import { Equipos } from './admin/equipos/equipos';
+
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', component: Home },
@@ -25,6 +30,11 @@ export const routes: Routes = [
       { path: 'dashboard', component: Dashboard },
       { path: 'calendario', component: Calendario },
       { path: 'inventario', component: Inventario },
+
+      // 🔥 NUEVAS RUTAS (ESTO TE FALTABA)
+      { path: 'ingresos', component: Ingresos },
+      { path: 'rentas', component: Rentas },
+      { path: 'equipos', component: Equipos }
     ]
   },
 
