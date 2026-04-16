@@ -1,0 +1,16 @@
+/* Esto asegura que el Navbar sea una franja negra sólida y alta */
+.navbar {
+    min-height: 80px;
+    background-color: #212529 !important; /* Negro total */
+    border-bottom: 2px solid #ffc107; /* Una rayita amarilla para que se vea pro */
+}
+
+/* Estilo para los textos del menú */
+.nav-link {
+    color: white !important;
+    transition: 0.3s;
+}
+
+.nav-link:hover {
+    color: #ffc107 !important; /* Cambia a amarillo al pasar el mouse */
+}

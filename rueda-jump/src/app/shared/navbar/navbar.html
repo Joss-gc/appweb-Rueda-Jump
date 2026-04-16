@@ -1,16 +1,21 @@
-<nav class="navbar">
-  <div class="navbar-logo">
-    <img src="assets/logo.jpg" alt="Rueda Jump Logo">
-    <span>RUEDA JUMP</span>
-  </div>
-
-  <ul class="navbar-links">
-    <li><a routerLink="/home" routerLinkActive="active">Inicio</a></li>
-    <li><a routerLink="/catalogo" routerLinkActive="active">Catálogo</a></li>
-    <li><a routerLink="/contacto" routerLinkActive="active">Contacto</a></li>
-  </ul>
-
-  <div class="navbar-admin">
-    <button routerLink="/admin/login" class="btn-admin">Acceso Admin</button>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm sticky-top">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center" routerLink="/">
+      <img src="assets/RJ.png" alt="Logo" width="45" height="45" class="me-2 rounded">
+      <span class="fw-bold text-warning">RUEDA JUMP</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="menuPrincipal">
+      <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link" routerLink="/home" routerLinkActive="active">Inicio</a></li>
+        <li class="nav-item"><a class="nav-link" routerLink="/catalogo" routerLinkActive="active">Catálogo</a></li>
+        <li class="nav-item"><a class="nav-link" routerLink="/contacto" routerLinkActive="active">Contacto</a></li>
+      </ul>
+      <div class="d-flex">
+        <button routerLink="/admin/login" class="btn btn-outline-info fw-bold">Acceso Admin</button>
+      </div>
+    </div>
   </div>
 </nav>

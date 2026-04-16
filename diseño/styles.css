@@ -1,0 +1,13 @@
+/* Oculta la barra de navegación pública si estamos dentro del panel de admin */
+body:has(app-inventario) app-navbar,
+body:has(app-calendario) app-navbar,
+body:has(app-dashboard) app-navbar,
+body:has(app-clientes) app-navbar,
+body:has(app-solicitudes) app-navbar,
+body:has(app-inventario) nav.navbar,
+body:has(app-calendario) nav.navbar,
+body:has(app-dashboard) nav.navbar,
+body:has(app-clientes) nav.navbar,
+body:has(app-solicitudes) nav.navbar {
+  display: none !important;
+}
